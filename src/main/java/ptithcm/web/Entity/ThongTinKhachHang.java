@@ -21,5 +21,58 @@ public class ThongTinKhachHang {
     @Column(name = "soDienThoai")
     private String soDienThoai;
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public NguoiDung getNguoiDung() {
+		return nguoiDung;
+	}
+
+	public void setNguoiDung(NguoiDung nguoiDung) {
+		this.nguoiDung = nguoiDung;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getDiaChi() {
+		return diaChi;
+	}
+
+	public void setDiaChi(String diaChi) {
+		this.diaChi = diaChi;
+	}
+
+	public String getSoDienThoai() {
+		return soDienThoai;
+	}
+
+	public void setSoDienThoai(String soDienThoai) {
+		this.soDienThoai = soDienThoai;
+	}
+
+	public ThongTinKhachHang(Long id, NguoiDung nguoiDung, String email, String diaChi, String soDienThoai) {
+		super();
+		this.id = id;
+		this.nguoiDung = nguoiDung;
+		this.email = email;
+		this.diaChi = diaChi;
+		this.soDienThoai = soDienThoai;
+	}
+
+	public ThongTinKhachHang() {
+		super();
+	}
+
     // Getters and setters
 }

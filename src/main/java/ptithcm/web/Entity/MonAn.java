@@ -35,7 +35,8 @@ public class MonAn {
     @Column(name = "gia")
     private BigDecimal gia;
     
-    @Column(name = "img")
+    @Lob // Sử dụng @Lob để lưu trữ dữ liệu lớn
+    @Column(name = "img", columnDefinition = "VARBINARY(MAX)")
     private byte[] img;
     
     @Column(name = "trangThai")
