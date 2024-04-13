@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Chi tiết đơn hàng</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         .home-oder {
             position: relative;
@@ -65,7 +66,7 @@
         </tbody>
     </table>
     <div>
-        <p>Tên: <span th:text="${donHang.nguoiDung.tenDangNhap}"></span></p>
+        <p>Tên: <span th:text="${donHang.nguoiDung.thongTinKhachHang.hoTen}"></span></p>
         <p>Email: <span th:text="${donHang.nguoiDung.thongTinKhachHang.email}"></span></p>
         <p>Địa chỉ: <span th:text="${donHang.nguoiDung.thongTinKhachHang.diaChi}"></span></p>
         <p>Số điện thoại: <span th:text="${donHang.nguoiDung.thongTinKhachHang.soDienThoai}"></span></p>
