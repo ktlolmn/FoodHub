@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Quản lí món ăn</title>
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script>
+	document
+			.addEventListener(
+					'DOMContentLoaded',
+					function() {
+						// Ẩn form edit và form add ban đầu
+						document.getElementById('editModal').style.display = 'none';
+						document.getElementById('addModal').style.display = 'none';
+
+						// Sự kiện nhấn nút close để đóng form edit
+						document
+								.getElementById('editCloseBtn')
+								.addEventListener(
+										'click',
+										function() {
+											document
+													.getElementById('editModal').style.display = 'none';
+										});
+
+						// Sự kiện nhấn nút close để đóng form add
+						document
+								.getElementById('addCloseBtn')
+								.addEventListener(
+										'click',
+										function() {
+											document.getElementById('addModal').style.display = 'none';
+										});
+
+						var editBtns = document.querySelectorAll('.editBtn');
+						editBtns
+								.forEach(function(editBtn) {
+									editBtn
+											.addEventListener(
+													'click',
+													function() {
+														var id = editBtn.dataset.id;
+														var ten = editBtn.dataset.ten;
+														var gia = editBtn.dataset.gia;
+														document
+																.getElementById(
+																		'editForm')
+																.querySelector(
+																		'input[name="id"]').value = id;
+														document
+																.getElementById(
+																		'editForm')
+																.querySelector(
+																		'input[name="ten"]').value = ten;
+														document
+																.getElementById(
+																		'editForm');
+														document
+																.getElementById(
+																		'editForm')
+																.querySelector(
+																		'input[name="gia"]').value = gia;
+														document
+																.getElementById('editModal').style.display = 'block';
+													});
+								});
+
+						document
+								.getElementById('addBtn')
+								.addEventListener(
+										'click',
+										function() {
+											document.getElementById('addModal').style.display = 'block';
+										});
+					});
+</script>
+
+<!-- Thêm CSS vào đây -->
+<style>
+.home-oder {
+	position: relative;
+	background-color: rgba(95, 158, 160, 0.692);
+	margin-left: 270px;
+	margin-top: 40px;
+	max-height: 670px;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items:center;
+	height: 570px;
+	padding: 0;
+	border-top-left-radius: 25px;
+	border-bottom-left-radius: 25px;
+}
+
+.list-items {
+	margin-top: 12px;
+	text-align: center;
+	border-radius: 10px;
+	box-shadow: 2px 3px 10px #838181;
+	background-color: rgba(238, 238, 238, 0.884);
+	display: flex;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	list-style: none;
+	padding: 12px 0 12px 12px;
+	overflow: auto;
+	/* Tạo thanh cuộn nếu danh sách vượt quá kích thước cha */
+	max-height: 90%;
+	width: 80%; /* Đặt chiều cao cố định cho danh sách */
+}
+
+.list-items::-webkit-scrollbar-thumb {
+	background: #00000069;
+	border-radius: 10px;
+}
+
+.list-items::-webkit-scrollbar {
+	width: 5px;
+}
+
+.list-items::-webkit-scrollbar-track {
+	border-radius: 10px;
+	border: 1px solid #ccc;
+}
+
+.item {
+	background-color: #ffff;
+	margin: 10px;
+	width: calc(25% - 25px);
+	/* Chiều rộng của mỗi mục là 50% với khoảng cách 10px giữa chúng */
+	box-sizing: border-box;
+	/* Đảm bảo kích thước tính cả border và padding */
+	float: left; /* Cho phép các mục nằm cạnh nhau */
+	border-radius: 10px;
+	overflow: hidden;
+	height: 280px;
+	box-shadow: 4px 4px 10px #615f5f;
+}
+
+.item img {
+	width: 100%;
+	height: 60%; /* Duy trì tỷ lệ khung hình tự động */
+}
+
+.item .decrip {
+	height: 40%;
+}
+
+.item .decrip h4 {
+	height: 33px;
+	margin: 4px 0 0 0;
+	padding: 0;
+}
+
+.item .decrip p {
+	margin: 4px 0;
+	padding: 0;
+}
+
+.item .decrip button {
+	margin: 4px 0;
+	padding: 8px 20px;
+	border: none;
+	border-radius: 5px;
+	background-color: rgba(122, 71, 23, 0.671);
+	color: #fff;
+}
+
+.item .decrip button:hover {
+	cursor: pointer;
+}
+
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.4);
+	padding-top: 60px;
+}
+
+.modal-content {
+	background-color: #fefefe;
+	margin: 5% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%;
+}
+
+.close {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close:hover, .close:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+#editForm input[type="text"], #editForm input[type="number"] {
+	width: 100%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+#editForm input[type="submit"] {
+	width: 100%;
+	background-color: #4CAF50;
+	color: white;
+	padding: 14px 20px;
+	margin: 8px 0;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+#editForm input[type="submit"]:hover {
+	background-color: #45a049;
+}
+
+#addForm input[type="text"], #addForm input[type="number"] {
+	width: 100%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+#addForm input[type="submit"] {
+	width: 100%;
+	background-color: #4CAF50;
+	color: white;
+	padding: 14px 20px;
+	margin: 8px 0;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+#addForm input[type="submit"]:hover {
+	background-color: #45a049;
+}
+</style>
+<!-- Kết thúc phần thêm CSS -->
+
+</head>
+<body>
+	<div th:include="admin/Fragments/header :: header"></div>
+	<div class="home-oder">
+		<h2>Danh sách món ăn</h2>
+		<ul style="overflow: auto;" class="list-items">
+			<li th:each="monAn : ${danhSachMonAn}" class="item"><img
+				th:src="'data:image/jpeg;base64,' + ${monAn.base64Image}"
+				alt="Image">
+				<div class="decrip">
+					<h4 th:text="${monAn.ten}"></h4>
+					<p th:text="${monAn.gia}"></p>
+					<button type="button" class="editBtn" th:data-id="${monAn.id}"
+						th:data-ten="${monAn.ten}" th:data-gia="${monAn.gia}">Sửa</button>
+					<a th:href="@{'/admin/monan/delete/' + ${monAn.id}}">Xoá</a>
+				</div></li>
+		</ul>
+		<button type="button" id="addBtn">Thêm mới món ăn</button>
+
+		<!-- Modal for edit -->
+		<div class="modal fade" id="editModal" tabindex="-1" role="dialog"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa món
+							ăn</h5>
+						<button type="button" class="close" id="editCloseBtn"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form id="editForm" th:action="@{/admin/monan/save}" method="post"
+							enctype="multipart/form-data">
+							<input type="hidden" name="id"> <input type="text"
+								name="ten" placeholder="Tên món ăn"><br> <input
+								type="number" name="gia" placeholder="Giá"><br> <input
+								type="file" name="file"><br> <input type="submit"
+								value="Cập nhật">
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Modal for add -->
+		<div class="modal fade" id="addModal" tabindex="-1" role="dialog"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Thêm mới món
+							ăn</h5>
+						<button type="button" class="close" id="addCloseBtn"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form id="addForm" th:action="@{/admin/monan/save}" method="post"
+							enctype="multipart/form-data">
+							<input type="text" name="ten" placeholder="Tên món ăn"><br>
+							<input type="number" name="gia" placeholder="Giá"><br>
+							<input type="file" name="file"><br> <input
+								type="submit" value="Thêm món ăn">
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

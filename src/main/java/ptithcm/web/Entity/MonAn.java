@@ -11,11 +11,10 @@ public class MonAn {
         super();
     }
 
-    public MonAn(Long id, String ten, String moTa, BigDecimal gia, byte[] img, String trangThai) {
+    public MonAn(Long id, String ten, BigDecimal gia, byte[] img, String trangThai) {
         super();
         this.id = id;
         this.ten = ten;
-        this.moTa = moTa;
         this.gia = gia;
         this.img = img;
         this.trangThai = trangThai;
@@ -28,9 +27,6 @@ public class MonAn {
     
     @Column(name = "ten")
     private String ten;
-    
-    @Column(name = "moTa", columnDefinition = "TEXT")
-    private String moTa;
     
     @Column(name = "gia")
     private BigDecimal gia;
@@ -63,13 +59,6 @@ public class MonAn {
         this.ten = ten;
     }
 
-    public String getMoTa() {
-        return moTa;
-    }
-
-    public void setMoTa(String moTa) {
-        this.moTa = moTa;
-    }
 
     public BigDecimal getGia() {
         return gia;

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+<header>
+    <div class="header" style="background-color: rgba(95, 158, 160, 0.692); position: fixed; width: 240px; display: flex; flex-direction: column; bottom: 12px; top: 12px; left: 30px; border-radius: 10px; max-height: 700px;">
+        <div class="logo" style="margin-top: 24px; display: flex; justify-content: center; flex-direction: column; align-items: center;">
+            <img src="/assets/logo.png" alt="" style="border-radius: 50%; width: 45%;">
+            <div class="title" style="display: flex; justify-content: center;">
+                <img src="/assets/title.png" alt="">
+            </div>
+        </div>
+        <div class="menu" style="margin-top: 12px;">
+            <ul style="padding: 0;">
+                <li style="cursor: pointer; margin: 12px; padding: 8px; list-style: none; border-radius: 5px; background-color: rgba(122, 71, 23, 0.671); box-shadow: 3px 4px 10px #000;"><a href="/admin/monan" style="text-decoration: none; font-size: 18px; text-transform: uppercase; color: #ffff;">Quản lý món ăn</a></li>
+                <li style="cursor: pointer; margin: 12px; padding: 8px; list-style: none; border-radius: 5px; background-color: rgba(122, 71, 23, 0.671); box-shadow: 3px 4px 10px #000;"><a href="/admin/donhang" style="text-decoration: none; font-size: 18px; text-transform: uppercase; color: #ffff;">Quản lý đơn hàng</a></li>
+            </ul>
+        </div>
+        <div class="user" style="display: flex; margin-top: 44px; justify-content: center; position: relative;">
+            <i class="fas fa-user-circle" style="font-size: 50px;"></i>
+            <ul style="position: absolute; display: none; top: 30px; left: 50%; transform: translateX(-50%); padding: 0;">
+                <li style="cursor: pointer; margin: 12px; padding: 8px; list-style: none; border-radius: 5px; background-color: rgba(122, 71, 23, 0.671); box-shadow: 3px 4px 10px #000; width: 120px;"><a href="/changePassword" style="color: #fff; text-decoration: none;">Đổi mật khẩu</a></li>
+                <li style="cursor: pointer; margin: 12px; padding: 8px; list-style: none; border-radius: 5px; background-color: rgba(122, 71, 23, 0.671); box-shadow: 3px 4px 10px #000; width: 120px;"><a href="/logout" style="color: #fff; text-decoration: none;">Đăng xuất</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<script th:inline="javascript">
+    const currentURL = window.location.pathname;
+    const menuItems = document.querySelectorAll('.menu a');
+
+    menuItems.forEach((menuItem) => {
+        if (menuItem.getAttribute('href') === currentURL) {
+            menuItem.parentNode.classList.add('active-menu');
+        }
+    });
+</script>
+</body>
+</html>

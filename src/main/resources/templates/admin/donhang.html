@@ -3,36 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <title>Quản lí đơn hàng</title>
+    <style>
+        .home-oder {
+            position: relative;
+            background-color: rgba(95, 158, 160, 0.692);
+            margin-left: 270px;
+            margin-top: 40px;
+            max-height: 670px;
+            display: flex;
+            flex-direction: column;
+            align-items:center;
+            height: 570px;
+            padding: 0;
+            border-top-left-radius: 25px;
+            border-bottom-left-radius: 25px;
+        }
+
+        table {
+            width: 80%; /* Kích thước bảng là 80% của home-order */
+            border-collapse: collapse;
+            margin-top: 20px; /* Thêm khoảng cách phía trên bảng */
+        }
+
+        th, td {
+            border: 1px solid #ddd; /* Đường viền của ô */
+            padding: 8px; /* Khoảng cách bên trong ô */
+            text-align: left; /* Căn lề văn bản */
+        }
+
+        th {
+            background-color: #f2f2f2; /* Màu nền của ô tiêu đề */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2; /* Màu nền của các hàng chẵn */
+        }
+
+        tr:hover {
+            background-color: #ddd; /* Màu nền khi di chuột qua */
+        }
+    </style>
 </head>
 <body>
+<div th:include="admin/Fragments/header :: header"></div>
+<div class="home-oder">
     <h2>Danh sách đơn hàng</h2>
-    <table border="1">
+    <table>
         <thead>
-            <tr>
-                <th>ID</th>
-                <th>Người dùng</th>
-                <th>Ngày tạo</th>
-                <th>Trạng thái</th>
-                <th>Hành động</th>
-            </tr>
+        <tr>
+            <th>Mã đơn hàng</th>
+            <th>Người đặt hàng</th>
+            <th>Ngày tạo</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
         </thead>
         <tbody>
-            <tr th:each="donHang : ${danhSachDonHang}">
-                <td th:text="${donHang.id}"></td>
-                <td th:text="${donHang.nguoiDung.tenDangNhap}"></td>
-                <td th:text="${donHang.ngayTao}"></td>
-                <td th:text="${donHang.trangThai}"></td>
-                <td>
-                    <a th:href="@{/admin/donhang/{id}(id=${donHang.id})}">Xem chi tiết</a>
-                    <form th:action="@{/admin/donhang/confirm/{id}(id=${donHang.id})}" method="post">
-                        <button type="submit">Xác nhận</button>
-                    </form>
-                    <form th:action="@{/admin/donhang/reject/{id}(id=${donHang.id})}" method="post">
-                        <button type="submit">Từ chối</button>
-                    </form>
-                </td>
-            </tr>
+        <tr th:each="donHang : ${danhSachDonHang}">
+            <td th:text="${donHang.id}"></td>
+            <td th:text="${donHang.nguoiDung.tenDangNhap}"></td>
+            <td th:text="${donHang.ngayTao}"></td>
+            <td th:text="${donHang.trangThai}"></td>
+            <td>
+                <a th:href="@{/admin/donhang/{id}(id=${donHang.id})}">Xem chi tiết</a>
+                <!--<form th:action="@{/admin/donhang/confirm/{id}(id=${donHang.id})}" method="post">
+                    <button type="submit">Xác nhận</button>
+                </form>
+                <form th:action="@{/admin/donhang/reject/{id}(id=${donHang.id})}" method="post">
+                    <button type="submit">Từ chối</button>
+                </form>-->
+            </td>
+        </tr>
         </tbody>
     </table>
+</div>
 </body>
 </html>

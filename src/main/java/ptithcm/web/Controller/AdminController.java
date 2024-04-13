@@ -14,6 +14,7 @@ import ptithcm.web.Service.ChiTietDonHangService;
 import ptithcm.web.Service.DonHangService;
 import ptithcm.web.Service.MonAnService;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -27,15 +28,19 @@ public class AdminController {
 	@GetMapping("/monan")
 	public String viewMonAn(Model model) {
 		List<MonAn> danhSachMonAn = monAnService.getAllMonAn();
+		List<MonAn> list = new ArrayList<MonAn>();
 		for (MonAn monAn : danhSachMonAn) {
-			if (monAn.getImg() != null) {
-				String base64Image = Base64.getEncoder().encodeToString(monAn.getImg());
-				monAn.setBase64Image(base64Image);
+			if(monAn.getTrangThai().equals("active")) {
+				if (monAn.getImg() != null) {
+					String base64Image = Base64.getEncoder().encodeToString(monAn.getImg());
+					monAn.setBase64Image(base64Image);
+				}
+				list.add(monAn);
 			}
 		}
-		model.addAttribute("danhSachMonAn", danhSachMonAn);
+		model.addAttribute("danhSachMonAn", list);
 		model.addAttribute("monAn", new MonAn());
-		return "monan";
+		return "admin/monan";
 	}
 
 	@PostMapping("/monan/save")
@@ -44,6 +49,7 @@ public class AdminController {
 		if (!file.isEmpty()) {
 			monAn.setImg(file.getBytes());
 		}
+		monAn.setTrangThai("active");
 		monAnService.saveMonAn(monAn);
 		redirectAttributes.addFlashAttribute("successMessage", "Món ăn đã được lưu thành công.");
 		return "redirect:/admin/monan";
@@ -71,7 +77,9 @@ public class AdminController {
 
 	@GetMapping("/monan/delete/{id}")
 	public String deleteMonAn(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
-		monAnService.deleteMonAn(id);
+		MonAn monAn = monAnService.getMonAnById(id);
+		monAn.setTrangThai("UnActive");
+		monAnService.saveMonAn(monAn);
 		redirectAttributes.addFlashAttribute("successMessage", "Món ăn đã được xoá thành công.");
 		return "redirect:/admin/monan";
 	}
