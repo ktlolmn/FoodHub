@@ -15,10 +15,10 @@ public class ThongTinKhachHang {
     @Column(name = "email")
     private String email;
     
-    @Column(name = "hoTen")
+    @Column(name = "hoTen", columnDefinition = "nvarchar(225)")
     private String hoTen;
     
-    @Column(name = "diaChi")
+    @Column(name = "diaChi", columnDefinition = "nvarchar(MAX)")
     private String diaChi;
     
     @Column(name = "soDienThoai")

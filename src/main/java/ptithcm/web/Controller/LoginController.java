@@ -59,20 +59,27 @@ public class LoginController {
     	return"login/register";
     }
     @PostMapping("/register")
-    public String register(ModelMap modelMap, NguoiDung nguoiDung, RedirectAttributes redirectAttributes) {
+    public String register(ModelMap modelMap, NguoiDung nguoiDung,
+    		@RequestParam("xacNhanMatKhau") String xacNhanMatKhau, 
+    		RedirectAttributes redirectAttributes) {
 
         NguoiDung nguoiDung2 = nguoiDungService.findByTenDangNhap(nguoiDung.getTenDangNhap());
 
-        if (nguoiDung2 != null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Tên đăng nhập đã tồn tại!");
-            return "redirect:/login";
-        } else {
-            VaiTro vaiTroUser = vaiTroService.findByTenVaiTro("User");
-            nguoiDung.setVaiTro(vaiTroUser);
-            nguoiDungService.save(nguoiDung);
-            modelMap.addAttribute("nguoiDung", nguoiDung);
+        if(nguoiDung.getMatKhau().equals(xacNhanMatKhau)) {
+        	if (nguoiDung2 != null) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Tên đăng nhập đã tồn tại!");
+                return "redirect:/register";
+            } else {
+                VaiTro vaiTroUser = vaiTroService.findByTenVaiTro("User");
+                nguoiDung.setVaiTro(vaiTroUser);
+                nguoiDungService.save(nguoiDung);
+                modelMap.addAttribute("nguoiDung", nguoiDung);
 
-            return "redirect:/login";
+                return "redirect:/login";
+            }
+        }else {
+        	redirectAttributes.addFlashAttribute("errorMessage", "Xác nhận mật khẩu không đúng!");
+            return "redirect:/register";
         }
     }
     

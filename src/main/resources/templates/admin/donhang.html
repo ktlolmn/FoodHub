@@ -5,6 +5,9 @@
     <title>Quản lí đơn hàng</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
+    	body{
+    		font-family: arial;
+    	}
         .home-oder {
             position: relative;
             background-color: rgba(95, 158, 160, 0.692);
@@ -18,33 +21,34 @@
             padding: 0;
             border-top-left-radius: 25px;
             border-bottom-left-radius: 25px;
+            overflow-y: auto; /* Thêm thanh cuộn cho bảng */
         }
+            table {
+        width: 80%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
 
-        table {
-            width: 80%; /* Kích thước bảng là 80% của home-order */
-            border-collapse: collapse;
-            margin-top: 20px; /* Thêm khoảng cách phía trên bảng */
-        }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
 
-        th, td {
-            border: 1px solid #ddd; /* Đường viền của ô */
-            padding: 8px; /* Khoảng cách bên trong ô */
-            text-align: left; /* Căn lề văn bản */
-        }
+    th {
+        background-color: #f2f2f2;
+    }
 
-        th {
-            background-color: #f2f2f2; /* Màu nền của ô tiêu đề */
-        }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
 
-        tr:nth-child(even) {
-            background-color: #f2f2f2; /* Màu nền của các hàng chẵn */
-        }
-
-        tr:hover {
-            background-color: #ddd; /* Màu nền khi di chuột qua */
-        }
-    </style>
-</head>
+    tr:hover {
+        background-color: #ddd;
+    }
+</style>
+        </head>
 <body>
 <div th:include="admin/Fragments/header :: header"></div>
 <div class="home-oder">
@@ -62,7 +66,7 @@
         <tbody>
         <tr th:each="donHang : ${danhSachDonHang}">
             <td th:text="${donHang.id}"></td>
-            <td th:text="${donHang.nguoiDung.tenDangNhap}"></td>
+            <td th:text="${donHang.nguoiDung.thongTinKhachHang.hoTen}"></td>
             <td th:text="${donHang.ngayTao}"></td>
             <td th:text="${donHang.trangThai}"></td>
             <td>

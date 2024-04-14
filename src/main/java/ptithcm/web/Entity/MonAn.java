@@ -11,7 +11,7 @@ public class MonAn {
         super();
     }
 
-    public MonAn(Long id, String ten, BigDecimal gia, byte[] img, String trangThai) {
+    public MonAn(Long id, String ten, BigDecimal gia, byte[] img, Boolean trangThai) {
         super();
         this.id = id;
         this.ten = ten;
@@ -25,7 +25,7 @@ public class MonAn {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "ten")
+    @Column(name = "ten", columnDefinition = "nvarchar(225)")
     private String ten;
     
     @Column(name = "gia")
@@ -36,7 +36,7 @@ public class MonAn {
     private byte[] img;
     
     @Column(name = "trangThai")
-    private String trangThai;
+    private Boolean trangThai;
     
     // Thuộc tính để lưu base64 của ảnh
     @Transient // Đánh dấu không mapping với cột trong database
@@ -76,11 +76,11 @@ public class MonAn {
         this.img = img;
     }
 
-    public String getTrangThai() {
+    public Boolean getTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(String trangThai) {
+    public void setTrangThai(Boolean trangThai) {
         this.trangThai = trangThai;
     }
 

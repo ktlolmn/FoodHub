@@ -30,7 +30,7 @@ public class AdminController {
 		List<MonAn> danhSachMonAn = monAnService.getAllMonAn();
 		List<MonAn> list = new ArrayList<MonAn>();
 		for (MonAn monAn : danhSachMonAn) {
-			if(monAn.getTrangThai().equals("active")) {
+			if(monAn.getTrangThai()) {
 				if (monAn.getImg() != null) {
 					String base64Image = Base64.getEncoder().encodeToString(monAn.getImg());
 					monAn.setBase64Image(base64Image);
@@ -49,7 +49,7 @@ public class AdminController {
 		if (!file.isEmpty()) {
 			monAn.setImg(file.getBytes());
 		}
-		monAn.setTrangThai("active");
+		monAn.setTrangThai(true);
 		monAnService.saveMonAn(monAn);
 		redirectAttributes.addFlashAttribute("successMessage", "Món ăn đã được lưu thành công.");
 		return "redirect:/admin/monan";
@@ -78,7 +78,7 @@ public class AdminController {
 	@GetMapping("/monan/delete/{id}")
 	public String deleteMonAn(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
 		MonAn monAn = monAnService.getMonAnById(id);
-		monAn.setTrangThai("UnActive");
+		monAn.setTrangThai(false);
 		monAnService.saveMonAn(monAn);
 		redirectAttributes.addFlashAttribute("successMessage", "Món ăn đã được xoá thành công.");
 		return "redirect:/admin/monan";

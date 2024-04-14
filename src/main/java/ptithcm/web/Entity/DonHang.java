@@ -29,7 +29,7 @@ public class DonHang {
     @Column(name = "ngayTao")
     private LocalDateTime ngayTao;
     
-    @Column(name = "trangThai")
+    @Column(name = "trangThai", columnDefinition = "nvarchar(225)")
     private String trangThai;
 
 	public Long getId() {
@@ -63,6 +63,4 @@ public class DonHang {
 	public void setTrangThai(String trangThai) {
 		this.trangThai = trangThai;
 	}
-
-    // Getters and setters
 }

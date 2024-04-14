@@ -5,6 +5,9 @@
     <title>Chi tiết đơn hàng</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
+    	body{
+    		font-family: arial;
+    	}
         .home-oder {
             position: relative;
             background-color: rgba(95, 158, 160, 0.692);
@@ -21,27 +24,35 @@
         }
 
         table {
-            width: 50%; /* Kích thước bảng là 80% của home-order */
+        	width: 95%;
             border-collapse: collapse;
-            margin-top: 20px; /* Thêm khoảng cách phía trên bảng */
+            overflow-y: auto; /* Thêm thanh cuộn cho bảng */
         }
 
         th, td {
-            border: 1px solid #ddd; /* Đường viền của ô */
-            padding: 8px; /* Khoảng cách bên trong ô */
-            text-align: left; /* Căn lề văn bản */
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
         }
 
         th {
-            background-color: #f2f2f2; /* Màu nền của ô tiêu đề */
+            background-color: #f2f2f2;
         }
 
         tr:nth-child(even) {
-            background-color: #f2f2f2; /* Màu nền của các hàng chẵn */
+            background-color: #f2f2f2;
         }
 
         tr:hover {
-            background-color: #ddd; /* Màu nền khi di chuột qua */
+            background-color: #ddd;
+        }
+        form > button {
+            cursor: pointer; 
+            margin: 12px; 
+            padding: 8px;
+            border-radius: 5px; 
+            background-color: rgba(122, 71, 23, 0.671); 
+            box-shadow: 3px 4px 10px grey;
         }
     </style>
 </head>
@@ -49,33 +60,40 @@
 <div th:include="admin/Fragments/header :: header"></div>
 <div class="home-oder">
     <h3>Thông tin đặt hàng</h3>
-    <table border="1">
-        <thead>
-        <tr>
-            <th>Món ăn</th>
-            <th>Số lượng</th>
-            <th>Giá</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="chiTiet : ${chiTietDonHang}">
-            <td th:text="${chiTiet.monAn.ten}"></td>
-            <td th:text="${chiTiet.soLuong}"></td>
-            <td th:text="${chiTiet.monAn.gia}"></td>
-        </tr>
-        </tbody>
-    </table>
-    <div>
-        <p>Tên: <span th:text="${donHang.nguoiDung.thongTinKhachHang.hoTen}"></span></p>
-        <p>Email: <span th:text="${donHang.nguoiDung.thongTinKhachHang.email}"></span></p>
-        <p>Địa chỉ: <span th:text="${donHang.nguoiDung.thongTinKhachHang.diaChi}"></span></p>
-        <p>Số điện thoại: <span th:text="${donHang.nguoiDung.thongTinKhachHang.soDienThoai}"></span></p>
-        <form th:action="@{/admin/donhang/confirm/{id}(id=${donHang.id})}" method="post">
-            <button type="submit">Xác nhận đơn hàng</button>
-        </form>
-        <form th:action="@{/admin/donhang/reject/{id}(id=${donHang.id})}" method="post">
-            <button type="submit">Từ chối đơn hàng</button>
-        </form>
+    <div style="border:1px grey solid;display: flex;background-color: azure;border-radius: 15px;flex-direction: column;justify-content: center;align-items: center;width: 70%;height: 80%;font-size: 20px;">
+	    <div style="max-height: 300px; overflow-y: auto; width: 100%; border-radius: 15px;display: flex;
+    			justify-content: center;margin-top:20px;">
+	    	<table border="1">
+		        <thead>
+		        <tr>
+		            <th>Món ăn</th>
+		            <th>Số lượng</th>
+		            <th>Giá (vnđ)</th>
+		        </tr>
+		        </thead>
+		        <tbody>
+		        <tr th:each="chiTiet : ${chiTietDonHang}">
+		            <td th:text="${chiTiet.monAn.ten}"></td>
+		            <td th:text="${chiTiet.soLuong}"></td>
+		            <td th:text="${chiTiet.monAn.gia}"></td>
+		        </tr>
+		        </tbody>
+		    </table>
+	    </div>
+	    <div>
+	        <p>Tên: <span th:text="${donHang.nguoiDung.thongTinKhachHang.hoTen}"></span></p>
+	        <p>Email: <span th:text="${donHang.nguoiDung.thongTinKhachHang.email}"></span></p>
+	        <p>Địa chỉ: <span th:text="${donHang.nguoiDung.thongTinKhachHang.diaChi}"></span></p>
+	        <p>Số điện thoại: <span th:text="${donHang.nguoiDung.thongTinKhachHang.soDienThoai}"></span></p>
+	        <div style="display: flex; justify-content: space-between;">
+		        <form th:action="@{/admin/donhang/confirm/{id}(id=${donHang.id})}" method="post">
+		            <button type="submit">Xác nhận đơn hàng</button>
+		        </form>
+		        <form th:action="@{/admin/donhang/reject/{id}(id=${donHang.id})}" method="post">
+		            <button type="submit">Từ chối đơn hàng</button>
+		        </form>
+	        </div>
+	    </div>
     </div>
 </div>
 </body>
