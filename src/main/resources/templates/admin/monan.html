@@ -6,20 +6,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Ẩn form edit và form add ban đầu
+        	
+        	
             document.getElementById('editModal').style.display = 'none';
             document.getElementById('addModal').style.display = 'none';
 
-            // Sự kiện nhấn nút close để đóng form edit
-            document.getElementById('editCloseBtn').addEventListener('click', function() {
-                document.getElementById('editModal').style.display = 'none';
-            });
 
             // Sự kiện nhấn nút close để đóng form add
-            document.getElementById('addCloseBtn').addEventListener('click', function() {
+            document.getElementById('closeAdd').addEventListener('click', function() {
                 document.getElementById('addModal').style.display = 'none';
             });
-
+            
+            document.getElementById('closeEdit').addEventListener('click',function(){
+            	document.getElementById('editModal').style.display = 'none';
+            })
             var editBtns = document.querySelectorAll('.editBtn');
             editBtns.forEach(function(editBtn) {
                 editBtn.addEventListener('click', function() {
@@ -35,6 +35,12 @@
 
             document.getElementById('addBtn').addEventListener('click', function() {
                 document.getElementById('addModal').style.display = 'block';
+            });
+            var giaInputs = document.querySelectorAll('.gia');
+            giaInputs.forEach(function(giaInput) {
+                giaInput.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^0-9]/g, ''); // Chỉ giữ lại các ký tự số
+                });
             });
         });
     </script>
@@ -71,8 +77,7 @@
             list-style: none;
             padding: 12px 0 12px 12px;
             overflow: auto;
-            /* Tạo thanh cuộn nếu danh sách vượt quá kích thước cha */
-            max-height: 90%;
+            height: 90%;
             width: 80%; /* Đặt chiều cao cố định cho danh sách */
         }
 
@@ -94,10 +99,8 @@
             background-color: #ffff;
             margin: 10px;
             width: calc(25% - 25px);
-            /* Chiều rộng của mỗi mục là 50% với khoảng cách 10px giữa chúng */
             box-sizing: border-box;
-            /* Đảm bảo kích thước tính cả border và padding */
-            float: left; /* Cho phép các mục nằm cạnh nhau */
+            float: left;
             border-radius: 10px;
             overflow: hidden;
             height: 280px;
@@ -106,7 +109,7 @@
 
         .item img {
             width: 100%;
-            height: 60%; /* Duy trì tỷ lệ khung hình tự động */
+            height: 60%;
         }
 
         .item .decrip {
@@ -125,6 +128,7 @@
         }
 
         .item .decrip button {
+        	box-shadow: 3px 4px 10px grey;
             margin: 4px 0;
             padding: 8px 20px;
             border: none;
@@ -150,82 +154,137 @@
             padding-top: 60px;
         }
 
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover, .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        #editForm input[type="text"], #editForm input[type="number"] {
-            width: 100%;
-            padding: 12px 20px;
-            margin: 8px 0;
-            display: inline-block;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        #editForm input[type="submit"] {
-            width: 100%;
-            background-color: #4CAF50;
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        #editForm input[type="submit"]:hover {
-            background-color: #45a049;
-        }
-
-        #addForm input[type="text"], #addForm input[type="number"] {
-            width: 100%;
-            padding: 12px 20px;
-            margin: 8px 0;
-            display: inline-block;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        #addForm input[type="submit"] {
-            width: 100%;
-            background-color: #4CAF50;
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        #addForm input[type="submit"]:hover {
-            background-color: #45a049;
-        }
+		*, *:after, *:before {
+			box-sizing: border-box;
+		}
+		
+		body {
+			font-family: "DM Sans", sans-serif;
+			background-color: #f1f3fb;
+			padding: 0 2rem;
+		}
+		
+		img {
+			max-width: 100%;
+			display: block;
+		}
+		 
+		input {
+			appearance: none;
+			border-radius: 0;
+		}
+		
+		.card {
+			margin: 2rem auto;
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			max-width: 425px;
+			background-color: #FFF;
+			border-radius: 10px;
+			box-shadow: 0 10px 20px 0 rgba(#999, .25);
+			padding: .75rem;
+		}
+		
+		.card-image {
+			border-radius: 8px;
+		}
+		
+		.card-heading {
+			position: absolute;
+			left: 10%;
+			top: 15%;
+			right: 10%;
+			font-size: 1.75rem;
+			font-weight: 700;
+			color: #735400;
+			line-height: 1.222;
+			small {
+				display: block;
+				font-size: .75em;
+				font-weight: 400;
+				margin-top: .25em;
+			}
+		}
+		
+		.card-form {
+			padding: 2rem 1rem 0;
+		}
+		
+		.input {
+			display: flex;
+			flex-direction: column-reverse;
+			position: relative;
+			padding-top: 1.5rem;
+			&+.input {
+				margin-top: 1.5rem;
+			}
+		}
+		
+		.input-label {
+			color: #8597a3;
+			position: absolute;
+			top: 1.5rem;
+			transition: .25s ease;
+		}
+		
+		.input-field {
+			border: 0;
+			z-index: 1;
+			background-color: transparent;
+			border-bottom: 2px solid #eee; 
+			font: inherit;
+			font-size: 1.125rem;
+			padding: .25rem 0;
+			&:focus, &:valid {
+				outline: 0;
+				border-bottom-color: rgba(122, 71, 23, 0.671);
+				&+.input-label {
+					color: rgba(122, 71, 23, 0.671);
+					transform: translateY(-1.5rem);
+				}
+			}
+		}
+		
+		.action {
+			margin-top: 1.5rem;
+			display: flex;
+			justify-content: end;
+		}
+		
+		.action>button {
+			cursor: pointer; 
+            margin: 12px; 
+            padding: 8px;
+            border-radius: 5px; 
+            background-color: rgba(122, 71, 23, 0.671); 
+            box-shadow: 3px 4px 10px grey;
+			color: #FFF;
+			border: 0;
+			&:focus {
+				outline: 0;
+			}
+		}
+		
+		.card-info {
+			padding: 1rem 1rem;
+			text-align: center;
+			font-size: .875rem;
+			color: #8597a3;
+			a {
+				display: block;
+				color: #6658d3;
+				text-decoration: none;
+			}
+		}
     </style>
-    <!-- Kết thúc phần thêm CSS -->
 </head>
 <body>
-<div th:include="admin/Fragments/header :: header"></div>
+<div th:replace="admin/Fragments/header :: header"></div>
 <div class="home-oder">
+    <button type="button" id="addBtn">Thêm mới món ăn</button>
     <h2>Danh sách món ăn</h2>
     <ul style="overflow: auto;" class="list-items">
         <li th:each="monAn : ${danhSachMonAn}" class="item">
@@ -238,52 +297,57 @@
             </div>
         </li>
     </ul>
-    <button type="button" id="addBtn">Thêm mới món ăn</button>
+    
+    
+	<div class="modal container" id="editModal">
+		<div class="card">
+			<h3 style="text-align:center;">Thay đổi thông tin món ăn</h3>
+			<form class="card-form" id="editForm" th:action="@{/admin/monan/save}" method="post" enctype="multipart/form-data">
+				<input type="hidden" name="id">
+				<div class="input">
+					<input type="text" name="ten" class="input-field"required/>
+					<label class="input-label">Tên món ăn</label>
+				</div>
+				<div class="input">
+					<input type="text" name="gia" class="input-field gia" required/>
+					<label class="input-label">Giá</label>
+				</div>
+				<div class="input">
+					<input type="file" name="file" required><br>
+					<label class="input-label">Ảnh mô tả</label>
+				</div>
+				<div class="action">
+					<button type="submit" class="action-button">Cập nhật</button>
+					<button id="closeEdit" type="button" class="action-button">Hủy</button>
+				</div>
+			</form>
+		</div>
+	</div>
 
-    <!-- Modal for edit -->
-    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa món ăn</h5>
-                    <button type="button" class="close" id="editCloseBtn" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="editForm" th:action="@{/admin/monan/save}" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="id">
-                        <input type="text" name="ten" placeholder="Tên món ăn"><br>
-                        <input type="number" name="gia" placeholder="Giá"><br>
-                        <input type="file" name="file"><br>
-                        <input type="submit" value="Cập nhật">
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal for add -->
-    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Thêm mới món ăn</h5>
-                    <button type="button" class="close" id="addCloseBtn" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="addForm" th:action="@{/admin/monan/save}" method="post" enctype="multipart/form-data">
-                        <input type="text" name="ten" placeholder="Tên món ăn"><br>
-                        <input type="number" name="gia" placeholder="Giá"><br>
-                        <input type="file" name="file"><br>
-                        <input type="submit" value="Thêm món ăn">
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Modal for add!-->
+    <div class="modal container" id="addModal">
+		<div class="card">
+			<h3 style="text-align:center;">Thay đổi thông tin món ăn</h3>
+			<form class="card-form" id="addForm" th:action="@{/admin/monan/save}" method="post" enctype="multipart/form-data">
+				<div class="input">
+					<input type="text" name="ten" class="input-field"required/>
+					<label class="input-label">Tên món ăn</label>
+				</div>
+				<div class="input">
+					<input type="text" name="gia" class="input-field gia" required/>
+					<label class="input-label">Giá</label>
+				</div>
+				<div class="input">
+					<input type="file" name="file" required><br>
+					<label class="input-label">Ảnh mô tả</label>
+				</div>
+				<div class="action">
+					<button type="submit" class="action-button">Cập nhật</button>
+					<button id="closeAdd" type="button" class="action-button">Hủy</button>
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
 </body>
 </html>

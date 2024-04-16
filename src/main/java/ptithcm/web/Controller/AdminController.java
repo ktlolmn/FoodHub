@@ -14,8 +14,10 @@ import ptithcm.web.Service.ChiTietDonHangService;
 import ptithcm.web.Service.DonHangService;
 import ptithcm.web.Service.MonAnService;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -55,25 +57,6 @@ public class AdminController {
 		return "redirect:/admin/monan";
 	}
 
-	@GetMapping("/monan/edit/{id}")
-	public String editMonAn(@PathVariable("id") Long id, Model model) {
-		MonAn monAn = monAnService.getMonAnById(id);
-		String base64Image = Base64.getEncoder().encodeToString(monAn.getImg());
-		monAn.setBase64Image(base64Image);
-		model.addAttribute("monAn", monAn);
-		return "admin/monan";
-	}
-
-	@PostMapping("/monan/update")
-	public String updateMonAn(@ModelAttribute("monAn") MonAn monAn, @RequestParam("file") MultipartFile file,
-			RedirectAttributes redirectAttributes) throws IOException {
-		if (!file.isEmpty()) {
-			monAn.setImg(file.getBytes());
-		}
-		monAnService.saveMonAn(monAn);
-		redirectAttributes.addFlashAttribute("successMessage", "Món ăn đã được cập nhật thành công.");
-		return "redirect:/admin/monan";
-	}
 
 	@GetMapping("/monan/delete/{id}")
 	public String deleteMonAn(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
@@ -100,6 +83,14 @@ public class AdminController {
     public String viewChiTietDonHang(@PathVariable("id") Long id, Model model) {
         DonHang donHang = donHangService.getDonHangById(id);
         List<ChiTietDonHang> chiTietDonHang = chiTietDonHangService.getChiTietDonHangByDonHangId(donHang.getId());
+        BigDecimal gia = BigDecimal.ZERO;
+
+        for (ChiTietDonHang ct : chiTietDonHang) {
+            gia = gia.add(ct.getMonAn().getGia()); 
+        }
+        
+        System.out.print(gia);
+
         model.addAttribute("donHang", donHang);
         model.addAttribute("chiTietDonHang", chiTietDonHang);
         return "admin/chitietdonhang";
