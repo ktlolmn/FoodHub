@@ -15,9 +15,7 @@ import ptithcm.web.Service.DonHangService;
 import ptithcm.web.Service.MonAnService;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -30,17 +28,14 @@ public class AdminController {
 	@GetMapping("/monan")
 	public String viewMonAn(Model model) {
 		List<MonAn> danhSachMonAn = monAnService.getAllMonAn();
-		List<MonAn> list = new ArrayList<MonAn>();
 		for (MonAn monAn : danhSachMonAn) {
-			if(monAn.getTrangThai()) {
 				if (monAn.getImg() != null) {
 					String base64Image = Base64.getEncoder().encodeToString(monAn.getImg());
 					monAn.setBase64Image(base64Image);
-				}
-				list.add(monAn);
 			}
+			System.out.print(monAn.getTrangThai());
 		}
-		model.addAttribute("danhSachMonAn", list);
+		model.addAttribute("danhSachMonAn", danhSachMonAn);
 		model.addAttribute("monAn", new MonAn());
 		return "admin/monan";
 	}
@@ -58,13 +53,30 @@ public class AdminController {
 	}
 
 
-	@GetMapping("/monan/delete/{id}")
-	public String deleteMonAn(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+	@GetMapping("/monan/tat/{id}")
+	public String tatMonAn(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
 		MonAn monAn = monAnService.getMonAnById(id);
 		monAn.setTrangThai(false);
 		monAnService.saveMonAn(monAn);
-		redirectAttributes.addFlashAttribute("successMessage", "Món ăn đã được xoá thành công.");
 		return "redirect:/admin/monan";
+	}
+	
+	@GetMapping("/monan/bat/{id}")
+	public String batMonAn(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+		MonAn monAn = monAnService.getMonAnById(id);
+		monAn.setTrangThai(true);
+		monAnService.saveMonAn(monAn);
+		return "redirect:/admin/monan";
+	}
+	
+	@GetMapping("/monan/xoa/{id}")
+	public String xoaMonAn(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+	    try{
+			monAnService.deleteMonAn(id);
+			return "redirect:/admin/monan";
+		} catch (Exception e) {
+			return "redirect:/login";
+		}
 	}
 
 	@Autowired

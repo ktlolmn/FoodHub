@@ -2,6 +2,8 @@ package ptithcm.web.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import jakarta.transaction.Transactional;
 import ptithcm.web.Entity.NguoiDung;
 import ptithcm.web.Repository.NguoiDungRepository;
 
@@ -16,6 +18,7 @@ public class NguoiDungServiceImpl implements NguoiDungService {
         return nguoiDungRepository.findByTenDangNhap(tenDangNhap);
     }
     @Override 
+    @Transactional
     public void save(NguoiDung nguoiDung) {
     	nguoiDungRepository.save(nguoiDung);
     }

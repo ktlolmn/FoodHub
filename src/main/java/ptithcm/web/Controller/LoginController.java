@@ -35,21 +35,23 @@ public class LoginController {
     private HttpServletRequest request;
 
     @PostMapping("/login")
-    public String login(@RequestParam("tenDangNhap") String tenDangNhap, 
+    public String login(@RequestParam("tenDangNhap") String tenDangNhap,
                         @RequestParam("matKhau") String matKhau,
-                        RedirectAttributes redirectAttributes
-                        ) {
+                        HttpServletRequest request,
+                        RedirectAttributes redirectAttributes) {
         NguoiDung nguoiDung = nguoiDungService.findByTenDangNhap(tenDangNhap);
-        if(nguoiDung != null && nguoiDung.getMatKhau().equals(matKhau)) {
+        if (nguoiDung != null && nguoiDung.getMatKhau().equals(matKhau)) {
             HttpSession session = request.getSession();
-            session.setAttribute("username", tenDangNhap); // Mã hóa và lưu tên đăng nhập vào session
-            if(nguoiDung.getVaiTro().getTenVaiTro().equals("Admin")){
+            session.setAttribute("username", tenDangNhap);
+            if (nguoiDung.getVaiTro().getTenVaiTro().equals("Admin")) {
+                session.setAttribute("role", "Admin");
                 return "redirect:/admin/monan";
             } else {
+                session.setAttribute("role", "User");
                 return "redirect:/user";
             }
         } else {
-            redirectAttributes.addFlashAttribute("errorMessage","Tên đăng nhập hoặc mật khẩu không hợp lệ!");
+            redirectAttributes.addFlashAttribute("errorMessage", "Tên đăng nhập hoặc mật khẩu không đúng!");
             return "redirect:/login";
         }
     }
