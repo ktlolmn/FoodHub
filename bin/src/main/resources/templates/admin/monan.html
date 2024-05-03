@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lí món ăn</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        	
+        	
+            document.getElementById('editModal').style.display = 'none';
+            document.getElementById('addModal').style.display = 'none';
+
+
+            // Sự kiện nhấn nút close để đóng form add
+            document.getElementById('closeAdd').addEventListener('click', function() {
+                document.getElementById('addModal').style.display = 'none';
+            });
+            
+            document.getElementById('closeEdit').addEventListener('click',function(){
+            	document.getElementById('editModal').style.display = 'none';
+            })
+            var editBtns = document.querySelectorAll('.editBtn');
+            editBtns.forEach(function(editBtn) {
+                editBtn.addEventListener('click', function() {
+                    var id = editBtn.dataset.id;
+                    var ten = editBtn.dataset.ten;
+                    var gia = editBtn.dataset.gia;
+                    document.getElementById('editForm').querySelector('input[name="id"]').value = id;
+                    document.getElementById('editForm').querySelector('input[name="ten"]').value = ten;
+                    document.getElementById('editForm').querySelector('input[name="gia"]').value = gia;
+                    document.getElementById('editModal').style.display = 'block';
+                });
+            });
+
+            document.getElementById('addBtn').addEventListener('click', function() {
+                document.getElementById('addModal').style.display = 'block';
+            });
+            var giaInputs = document.querySelectorAll('.gia');
+            giaInputs.forEach(function(giaInput) {
+                giaInput.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^0-9]/g, ''); // Chỉ giữ lại các ký tự số
+                });
+            });
+        });
+    </script>
+    <!-- Thêm CSS vào đây -->
+    <style>
+	    body{
+	    		font-family: arial;
+	    	}
+        .home-oder {
+            position: relative;
+            background-color: rgba(95, 158, 160, 0.692);
+            margin-left: 270px;
+            margin-top: 40px;
+            max-height: 670px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items:center;
+            height: 570px;
+            padding: 0;
+            border-top-left-radius: 25px;
+            border-bottom-left-radius: 25px;
+        }
+
+        .list-items {
+            margin-top: 12px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 2px 3px 10px #838181;
+            background-color: rgba(238, 238, 238, 0.884);
+            display: flex;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            list-style: none;
+            padding: 12px 0 12px 12px;
+            overflow: auto;
+            height: 90%;
+            width: 80%; /* Đặt chiều cao cố định cho danh sách */
+        }
+
+        .list-items::-webkit-scrollbar-thumb {
+            background: #00000069;
+            border-radius: 10px;
+        }
+
+        .list-items::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .list-items::-webkit-scrollbar-track {
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .item {
+            background-color: #ffff;
+            margin: 10px;
+            width: calc(25% - 25px);
+            box-sizing: border-box;
+            float: left;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 280px;
+            box-shadow: 4px 4px 10px #615f5f;
+        }
+
+        .item img {
+            width: 100%;
+            height: 60%;
+        }
+
+        .item .decrip {
+            height: 40%;
+        }
+
+        .item .decrip h4 {
+            height: 33px;
+            margin: 4px 0 0 0;
+            padding: 0;
+        }
+
+        .item .decrip p {
+            margin: 4px 0;
+            padding: 0;
+        }
+
+        .item .decrip button {
+        	box-shadow: 3px 4px 10px grey;
+            margin: 4px 0;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: rgba(122, 71, 23, 0.671);
+            color: #fff;
+        }
+
+        .item .decrip button:hover {
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+
+		*, *:after, *:before {
+			box-sizing: border-box;
+		}
+		
+		body {
+			font-family: "DM Sans", sans-serif;
+			background-color: #f1f3fb;
+			padding: 0 2rem;
+		}
+		
+		img {
+			max-width: 100%;
+			display: block;
+		}
+		 
+		input {
+			appearance: none;
+			border-radius: 0;
+		}
+		
+		.card {
+			margin: 2rem auto;
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			max-width: 425px;
+			background-color: #FFF;
+			border-radius: 10px;
+			box-shadow: 0 10px 20px 0 rgba(#999, .25);
+			padding: .75rem;
+		}
+		
+		.card-image {
+			border-radius: 8px;
+		}
+		
+		.card-heading {
+			position: absolute;
+			left: 10%;
+			top: 15%;
+			right: 10%;
+			font-size: 1.75rem;
+			font-weight: 700;
+			color: #735400;
+			line-height: 1.222;
+			small {
+				display: block;
+				font-size: .75em;
+				font-weight: 400;
+				margin-top: .25em;
+			}
+		}
+		
+		.card-form {
+			padding: 2rem 1rem 0;
+		}
+		
+		.input {
+			display: flex;
+			flex-direction: column-reverse;
+			position: relative;
+			padding-top: 1.5rem;
+			&+.input {
+				margin-top: 1.5rem;
+			}
+		}
+		
+		.input-label {
+			color: #8597a3;
+			position: absolute;
+			top: 1.5rem;
+			transition: .25s ease;
+		}
+		
+		.input-field {
+			border: 0;
+			z-index: 1;
+			background-color: transparent;
+			border-bottom: 2px solid #eee; 
+			font: inherit;
+			font-size: 1.125rem;
+			padding: .25rem 0;
+			&:focus, &:valid {
+				outline: 0;
+				border-bottom-color: rgba(122, 71, 23, 0.671);
+				&+.input-label {
+					color: rgba(122, 71, 23, 0.671);
+					transform: translateY(-1.5rem);
+				}
+			}
+		}
+		
+		.action {
+			margin-top: 1.5rem;
+			display: flex;
+			justify-content: end;
+		}
+		
+		.action>button {
+			cursor: pointer; 
+            margin: 12px; 
+            padding: 8px;
+            border-radius: 5px; 
+            background-color: rgba(122, 71, 23, 0.671); 
+            box-shadow: 3px 4px 10px grey;
+			color: #FFF;
+			border: 0;
+			&:focus {
+				outline: 0;
+			}
+		}
+		
+		.card-info {
+			padding: 1rem 1rem;
+			text-align: center;
+			font-size: .875rem;
+			color: #8597a3;
+			a {
+				display: block;
+				color: #6658d3;
+				text-decoration: none;
+			}
+		}
+    </style>
+</head>
+<body>
+<div th:replace="admin/Fragments/header :: header"></div>
+<div class="home-oder">
+    <button type="button" id="addBtn">Thêm mới món ăn</button>
+    <h2>Danh sách món ăn</h2>
+    <ul style="overflow: auto;" class="list-items">
+        <li th:each="monAn : ${danhSachMonAn}" class="item">
+            <img th:src="'data:image/jpeg;base64,' + ${monAn.base64Image}" alt="Image">
+            <div class="decrip">
+                <h4 th:text="${monAn.ten}"></h4>
+                <p th:text="${monAn.gia}"></p>
+                <button type="button" class="editBtn" th:data-id="${monAn.id}" th:data-ten="${monAn.ten}" th:data-gia="${monAn.gia}">Sửa</button>
+                <a th:href="@{'/admin/monan/delete/' + ${monAn.id}}">Xoá</a>
+            </div>
+        </li>
+    </ul>
+    
+    
+	<div class="modal container" id="editModal">
+		<div class="card">
+			<h3 style="text-align:center;">Thay đổi thông tin món ăn</h3>
+			<form class="card-form" id="editForm" th:action="@{/admin/monan/save}" method="post" enctype="multipart/form-data">
+				<input type="hidden" name="id">
+				<div class="input">
+					<input type="text" name="ten" class="input-field"required/>
+					<label class="input-label">Tên món ăn</label>
+				</div>
+				<div class="input">
+					<input type="text" name="gia" class="input-field gia" required/>
+					<label class="input-label">Giá</label>
+				</div>
+				<div class="input">
+					<input type="file" name="file" required><br>
+					<label class="input-label">Ảnh mô tả</label>
+				</div>
+				<div class="action">
+					<button type="submit" class="action-button">Cập nhật</button>
+					<button id="closeEdit" type="button" class="action-button">Hủy</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+    <!-- Modal for add!-->
+    <div class="modal container" id="addModal">
+		<div class="card">
+			<h3 style="text-align:center;">Thay đổi thông tin món ăn</h3>
+			<form class="card-form" id="addForm" th:action="@{/admin/monan/save}" method="post" enctype="multipart/form-data">
+				<div class="input">
+					<input type="text" name="ten" class="input-field"required/>
+					<label class="input-label">Tên món ăn</label>
+				</div>
+				<div class="input">
+					<input type="text" name="gia" class="input-field gia" required/>
+					<label class="input-label">Giá</label>
+				</div>
+				<div class="input">
+					<input type="file" name="file" required><br>
+					<label class="input-label">Ảnh mô tả</label>
+				</div>
+				<div class="action">
+					<button type="submit" class="action-button">Cập nhật</button>
+					<button id="closeAdd" type="button" class="action-button">Hủy</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+</body>
+</html>
