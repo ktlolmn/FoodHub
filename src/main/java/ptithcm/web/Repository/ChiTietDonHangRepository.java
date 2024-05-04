@@ -8,4 +8,5 @@ import ptithcm.web.Entity.ChiTietDonHang;
 
 public interface ChiTietDonHangRepository extends JpaRepository<ChiTietDonHang, Long> {
 	List<ChiTietDonHang> findByDonHangId(Long donHangId);
+	void deleteByDonHangId(Long donHangId);
 }

@@ -47,10 +47,15 @@ public class AdminController {
 		if (!file.isEmpty()) {
 			monAn.setImg(file.getBytes());
 		}
-		monAn.setTrangThai(true);
-		monAnService.saveMonAn(monAn);
-		redirectAttributes.addFlashAttribute("successMessage", "Món ăn đã được lưu thành công.");
-		return "redirect:/admin/monan";
+		try {
+			monAn.setTrangThai(true);
+			monAnService.saveMonAn(monAn);
+			redirectAttributes.addFlashAttribute("message", "Thành công.");
+			return "redirect:/admin/monan?success?";
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("message", "Lưu thất bại!");
+			return "redirect:/admin/monan?error?";
+		}
 	}
 
 
@@ -76,7 +81,8 @@ public class AdminController {
 			monAnService.deleteMonAn(id);
 			return "redirect:/admin/monan";
 		} catch (Exception e) {
-			return "redirect:/login";
+			redirectAttributes.addFlashAttribute("message", "Món ăn đang được đặt, không thể xóa.");
+			return "redirect:/admin/monan?error?";
 		}
 	}
 
@@ -112,10 +118,17 @@ public class AdminController {
     @PostMapping("/donhang/confirm/{id}")
     public String confirmDonHang(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         DonHang donHang = donHangService.getDonHangById(id);
-        donHang.setTrangThai("Đã xác nhận");
-        donHangService.saveDonHang(donHang);
-        redirectAttributes.addFlashAttribute("successMessage", "Đơn hàng đã được xác nhận.");
-        return "redirect:/admin/donhang";
+        try {
+			chiTietDonHangService.deleteByDonHangId(id);
+			donHang.setTrangThai("Đã xác nhận");
+	        donHangService.saveDonHang(donHang);
+	        redirectAttributes.addFlashAttribute("successMessage", "Đơn hàng đã được xác nhận.");
+	        return "redirect:/admin/donhang";
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("successMessage", "Có lỗi xảy ra.");
+	        return "redirect:/admin/donhang";
+		}
+        
     }
 
     @PostMapping("/donhang/reject/{id}")
