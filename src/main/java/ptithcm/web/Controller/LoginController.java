@@ -1,5 +1,7 @@
 package ptithcm.web.Controller;
 
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -7,6 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -123,6 +128,64 @@ public class LoginController {
     		redirectAttributes.addFlashAttribute("errorMessage","Mật khẩu cũ không đúng!");
     		return"redirect:/change-password";
     	}  
+    }
+    
+    @GetMapping("/forgot-password")
+    public String forgotPassword(ModelMap modelMap) {
+        return "login/forgot-password";
+    }
+    
+    @PostMapping("/forgot-password")
+    public String forgotPasswordPost(@RequestParam("tenDangNhap") String tenDangNhap,
+                                     @RequestParam("email") String email,
+                                     RedirectAttributes redirectAttributes) {
+        NguoiDung nguoiDung = nguoiDungService.findByTenDangNhap(tenDangNhap);
+
+        if (nguoiDung == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Tài khoản không tồn tại!");
+            return "redirect:/forgot-password";
+        }else {
+        	if(!nguoiDung.getThongTinKhachHang().getEmail().equals(email)) {
+	        	redirectAttributes.addFlashAttribute("errorMessage", "Email không tồn tại!");
+	            return "redirect:/forgot-password";
+        	}else {
+        		String newPassword = generateRandomPassword();
+	            sendNewPasswordToEmail(email, newPassword);
+	            nguoiDung.setMatKhau(newPassword);
+	            nguoiDungService.save(nguoiDung);
+	            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu mới đã được gửi đến email của bạn!");
+	            return "redirect:/login";
+	        }
+        }
+    }
+
+    private String generateRandomPassword() {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder newPassword = new StringBuilder();
+        Random random = new Random();
+
+        for (int i = 0; i < 8; i++) {
+            newPassword.append(characters.charAt(random.nextInt(characters.length())));
+        }
+
+        return newPassword.toString();
+    }
+
+    private void sendNewPasswordToEmail(String email, String newPassword) {
+        HtmlEmail mail = new HtmlEmail();
+        mail.setHostName("smtp.gmail.com"); 
+        mail.setSmtpPort(587);
+        mail.setAuthenticator(new DefaultAuthenticator("thanhanhynh@gmail.com", "asge zopg qbot nicp"));
+        mail.setStartTLSRequired(true); // Enable TLS
+        try {
+            mail.setFrom("thanhanhynh@gmail.com", "Lưu Thành"); 
+            mail.addTo(email);
+            mail.setSubject("Password Reset");
+            mail.setHtmlMsg("Your new password: " + newPassword);
+            mail.send();
+        } catch (EmailException e) {
+            e.printStackTrace();
+        }
     }
 
 }

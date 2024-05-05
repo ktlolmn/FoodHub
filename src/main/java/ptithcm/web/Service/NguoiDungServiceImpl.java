@@ -22,5 +22,9 @@ public class NguoiDungServiceImpl implements NguoiDungService {
     public void save(NguoiDung nguoiDung) {
     	nguoiDungRepository.save(nguoiDung);
     }
+    @Override
+    public Boolean existsByTenDangNhapAndThongTinKhachHang_Email(String tenDangNhap, String email) {
+    	return nguoiDungRepository.existsByTenDangNhapAndThongTinKhachHang_Email(tenDangNhap, email);
+    }
     
 }

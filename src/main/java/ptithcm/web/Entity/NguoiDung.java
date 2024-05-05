@@ -1,6 +1,8 @@
 package ptithcm.web.Entity;
 
 import jakarta.persistence.*;
+import javax.validation.constraints.NotBlank;
+
 
 @Entity
 @Table(name = "NguoiDung")
@@ -22,9 +24,11 @@ public class NguoiDung {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+//	@NotBlank(message = "Tên đăng nhập không được trống")
     @Column(name = "tenDangNhap", unique = true)
     private String tenDangNhap;
     
+//	@NotBlank(message = "Mật khẩu không không được trống")
     @Column(name = "matKhau")
     private String matKhau;
     
