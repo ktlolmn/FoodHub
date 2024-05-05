@@ -5,6 +5,7 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,12 +17,15 @@ import org.apache.commons.mail.HtmlEmail;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import ptithcm.web.Entity.NguoiDung;
+import ptithcm.web.Entity.ThongTinKhachHang;
 import ptithcm.web.Entity.VaiTro;
 import ptithcm.web.Service.NguoiDungService;
 import ptithcm.web.Service.VaiTroService;
 
 @Controller
 public class LoginController {
+	
+	
 	
 	@Autowired
 	NguoiDungService nguoiDungService;
@@ -33,6 +37,7 @@ public class LoginController {
     public String loginForm(ModelMap modelMap) {
     	HttpSession session = request.getSession();
     	session.removeAttribute("username");
+    	session.removeAttribute("role");
         return "login/login";
     }
     
@@ -45,7 +50,7 @@ public class LoginController {
                         HttpServletRequest request,
                         RedirectAttributes redirectAttributes) {
         NguoiDung nguoiDung = nguoiDungService.findByTenDangNhap(tenDangNhap);
-        if (nguoiDung != null && nguoiDung.getMatKhau().equals(matKhau)) {
+        if (nguoiDung != null && BCrypt.checkpw(matKhau, nguoiDung.getMatKhau())) {
             HttpSession session = request.getSession();
             session.setAttribute("username", tenDangNhap);
             if (nguoiDung.getVaiTro().getTenVaiTro().equals("Admin")) {
@@ -79,6 +84,8 @@ public class LoginController {
             } else {
                 VaiTro vaiTroUser = vaiTroService.findByTenVaiTro("User");
                 nguoiDung.setVaiTro(vaiTroUser);
+                String hashedPassword = BCrypt.hashpw(nguoiDung.getMatKhau(), BCrypt.gensalt());
+                nguoiDung.setMatKhau(hashedPassword);
                 nguoiDungService.save(nguoiDung);
                 modelMap.addAttribute("nguoiDung", nguoiDung);
 
@@ -92,7 +99,14 @@ public class LoginController {
     
     @GetMapping("/change-password")
     public String changePasswordForm() {
-    	return"login/change-password";
+    	HttpSession session = request.getSession();
+        String tenDangNhap = (String) session.getAttribute("username");
+        NguoiDung nguoiDung = nguoiDungService.findByTenDangNhap(tenDangNhap);
+        if(nguoiDung != null) {
+        	return"login/change-password";
+        }else {
+        	return"redirect:/login";
+        }
     }
     
     @PostMapping("/change-password")
@@ -106,16 +120,15 @@ public class LoginController {
         String tenDangNhap = (String) session.getAttribute("username");
 
         NguoiDung nguoiDung = nguoiDungService.findByTenDangNhap(tenDangNhap);
-        System.out.print(matKhauCu);
-        System.out.print(nguoiDung.getMatKhau().equals(matKhauCu));
 
-    	if(nguoiDung.getMatKhau().equals(matKhauCu)){
+    	if(BCrypt.checkpw(matKhauCu,nguoiDung.getMatKhau())){
             if(nguoiDung.getMatKhau().equals(matKhauMoi)) {
             	redirectAttributes.addFlashAttribute("errorMessage","Mật khẩu mới trùng mật khẩu cũ!");
         		return"redirect:/change-password";
             }else {
             	if(matKhauMoi.equals(xacNhanMatKhauMoi)) {
-                	nguoiDung.setMatKhau(matKhauMoi);
+            		String hashedPassword = BCrypt.hashpw(matKhauMoi, BCrypt.gensalt());
+                	nguoiDung.setMatKhau(hashedPassword);
                     nguoiDungService.save(nguoiDung);
                     redirectAttributes.addFlashAttribute("errorMessage","Đổi mật khẩu thành công!");
             		return"redirect:/change-password";
@@ -145,17 +158,24 @@ public class LoginController {
             redirectAttributes.addFlashAttribute("errorMessage", "Tài khoản không tồn tại!");
             return "redirect:/forgot-password";
         }else {
-        	if(!nguoiDung.getThongTinKhachHang().getEmail().equals(email)) {
-	        	redirectAttributes.addFlashAttribute("errorMessage", "Email không tồn tại!");
-	            return "redirect:/forgot-password";
+        	ThongTinKhachHang thongTinKhachHang = nguoiDung.getThongTinKhachHang();
+        	if(thongTinKhachHang == null || thongTinKhachHang.getEmail() == null) {
+        		redirectAttributes.addFlashAttribute("errorMessage", "Thông tin không tồn tại!");
+                return "redirect:/forgot-password";
         	}else {
-        		String newPassword = generateRandomPassword();
-	            sendNewPasswordToEmail(email, newPassword);
-	            nguoiDung.setMatKhau(newPassword);
-	            nguoiDungService.save(nguoiDung);
-	            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu mới đã được gửi đến email của bạn!");
-	            return "redirect:/login";
-	        }
+        		if(thongTinKhachHang.getEmail().equals(email)) {
+        			String newPassword = generateRandomPassword();
+    	            sendNewPasswordToEmail(email, newPassword);
+    	            String hashedPasswordString = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+    	            nguoiDung.setMatKhau(hashedPasswordString);
+    	            nguoiDungService.save(nguoiDung);
+    	            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu mới đã được gửi đến email của bạn!");
+    	            return "redirect:/login";
+        		}else {
+        			redirectAttributes.addFlashAttribute("errorMessage", "Email không đúng!");
+                    return "redirect:/forgot-password";
+        		}
+        	}
         }
     }
 
@@ -176,7 +196,7 @@ public class LoginController {
         mail.setHostName("smtp.gmail.com"); 
         mail.setSmtpPort(587);
         mail.setAuthenticator(new DefaultAuthenticator("thanhanhynh@gmail.com", "asge zopg qbot nicp"));
-        mail.setStartTLSRequired(true); // Enable TLS
+        mail.setStartTLSRequired(true);
         try {
             mail.setFrom("thanhanhynh@gmail.com", "Lưu Thành"); 
             mail.addTo(email);

@@ -1,7 +1,6 @@
 package ptithcm.web.Entity;
 
 import jakarta.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 
 @Entity
