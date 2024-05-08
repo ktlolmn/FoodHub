@@ -15,6 +15,7 @@ import ptithcm.web.Service.DonHangService;
 import ptithcm.web.Service.MonAnService;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
@@ -40,12 +41,41 @@ public class AdminController {
 		model.addAttribute("monAn", new MonAn());
 		return "admin/monan";
 	}
+	
+	@PostMapping("/monan/filter")
+	public String viewMonAnFilter(Model model,
+			@RequestParam("keyWord") String ten) {
+		List<MonAn> danhSachMonAn = monAnService.getAllMonAn();
+		List<MonAn> danhSachMonAnFilter = new ArrayList<MonAn>();
+		for(MonAn monAn: danhSachMonAn) {
+			if(monAn.getTen().toLowerCase().contains(ten.toLowerCase())) {
+				danhSachMonAnFilter.add(monAn);
+			}
+		}
+		Collections.sort(danhSachMonAnFilter, (monAn1, monAn2) -> Boolean.compare(monAn2.getTrangThai(), monAn1.getTrangThai()));
+		for (MonAn monAn : danhSachMonAnFilter) {
+				if (monAn.getImg() != null) {
+					String base64Image = Base64.getEncoder().encodeToString(monAn.getImg());
+					monAn.setBase64Image(base64Image);
+			}
+		}
+		model.addAttribute("danhSachMonAn", danhSachMonAnFilter);
+		model.addAttribute("monAn", new MonAn());
+		return "admin/monan";
+	}
 
 	@PostMapping("/monan/save")
-	public String saveMonAn(@ModelAttribute("monAn") MonAn monAn, @RequestParam("file") MultipartFile file,
+	public String saveMonAn(@ModelAttribute("monAn") MonAn monAn, 
+			@RequestParam("file") MultipartFile file,
+			@RequestParam(value = "keepImage", required = false) String keepImage,
 			RedirectAttributes redirectAttributes) throws IOException {
-		if (!file.isEmpty()) {
+		Boolean keepImgBoolean = "on".equals(keepImage);
+		if (!file.isEmpty() && !keepImgBoolean) {
 			monAn.setImg(file.getBytes());
+		}
+		if(keepImgBoolean) {
+			MonAn monAnCu = monAnService.getMonAnById(monAn.getId());
+			monAn.setImg(monAnCu.getImg());
 		}
 		try {
 			monAn.setTrangThai(true);

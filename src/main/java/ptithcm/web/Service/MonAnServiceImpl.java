@@ -17,6 +17,12 @@ public class MonAnServiceImpl implements MonAnService {
     public List<MonAn> getAllMonAn() {
         return monAnRepository.findAll();
     }
+    
+    @Override
+    
+    public List<MonAn> getMonAnByTen(String ten){
+    	return monAnRepository.getMonAnByTen(ten);
+    }
 
     @Override
     public MonAn getMonAnById(Long id) {

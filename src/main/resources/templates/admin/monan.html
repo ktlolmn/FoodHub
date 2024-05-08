@@ -50,6 +50,16 @@
                     this.value = this.value.replace(/[^0-9]/g, ''); // Chỉ giữ lại các ký tự số
                 });
             });
+            
+            const checkBox = document.querySelector("#keepImageCheckbox");
+            checkBox.addEventListener('change', () => {
+                const fileImg = document.querySelector('#file');
+                if (checkBox.checked) {
+                    fileImg.removeAttribute('required');
+                } else {
+                    fileImg.setAttribute('required', 'required');
+                }
+            });
         });
     </script>
     
@@ -75,7 +85,7 @@
         }
 
         .list-items {
-            margin-top: 12px;
+            margin-top: 24px;
             text-align: center;
             border-radius: 10px;
             box-shadow: 2px 3px 10px #838181;
@@ -181,7 +191,6 @@
 		}
 		 
 		input {
-			appearance: none;
 			border-radius: 0;
 		}
 		
@@ -258,7 +267,7 @@
 		}
 		
 		.action {
-			margin-top: 1.5rem;
+			margin-top: 1.3rem;
 			display: flex;
 			justify-content: end;
 		}
@@ -267,7 +276,7 @@
 			cursor: pointer; 
             margin: 12px; 
             padding: 8px;
-            border-radius: 5px; 
+            border-radius: 8px; 
             background-color: rgba(122, 71, 23, 0.671); 
             box-shadow: 3px 4px 10px grey;
 			color: #FFF;
@@ -288,21 +297,7 @@
 				text-decoration: none;
 			}
 		}
-		.deleteBtn {
-		    position: absolute;
-		    top: 5px;
-		    right: 5px;
-		    background-color: rgba(255, 0, 0, 0.5);
-		    color: white;
-		    width: 20px;
-		    height: 20px;
-		    line-height: 20px;
-		    text-align: center;
-		    border-radius: 50%;
-		    text-decoration: none;
-		    font-weight: bold;
-		    font-size: 14px;
-		}
+		
 		
 		.bg-red{
 			border: 1px red solid;
@@ -328,8 +323,30 @@
 			color: #FFF;
 			border: 0;" type="button" id="addBtn"><i style="font-size: 16px; margin-right: 4px;" class="fas fa-plus-circle"></i>Thêm mới món ăn</button>
 	</div>
+	<div style="position: absolute;top: 14px;right: 14px;">
+		<form action="/admin/monan/filter" method = 'post'>
+			<input name="keyWord" style="padding: 8px;
+				    outline: none;
+				    border: none;
+				    opacity: .8;
+				    border-radius: 12px;" 
+				type="text" id="searchInput" placeholder="Nhập từ khóa...">
+		    <button type="submit" style="border: none; cursor: pointer; 
+		        margin: 12px 12px 12px 0px; 
+		        padding: 8px;
+		        border-radius: 5px; 
+		        background-color: rgba(122, 71, 23, 0.671); 
+		        box-shadow: 3px 4px 10px grey;
+		        color: #FFF;
+		        border: 0;" id="searchBtn"><i style="font-size: 16px; margin-right: 4px;" class="fas fa-search"></i>Tìm kiếm</button>
+		
+		</form>
+	</div>
     <h2>Danh sách món ăn</h2>
     <ul style="overflow: auto;" class="list-items">
+    	<th:block style="text-align:center" th:if="${danhSachMonAn.isEmpty()}">
+	        <p>Danh sách món ăn trống.</p>
+	    </th:block>
 	    <li th:each="monAn : ${danhSachMonAn}" th:class="${monAn.trangThai} ? 'item bg-gr' : 'item bg-red'">
 	        <div style="position: relative;">
 	            <img th:src="'data:image/jpeg;base64,' + ${monAn.base64Image}" alt="Image" style="width: 100%; height: 160px;">
@@ -366,8 +383,15 @@
 					<label class="input-label">Giá</label>
 				</div>
 				<div class="input">
-					<input type="file" name="file" required><br>
+					<input id="file" type="file" name="file" required><br>
 					<label class="input-label">Ảnh mô tả</label>
+				</div>
+				<div class="input">
+				    <input style="position: absolute;
+					    left: 35%;
+					    top: 52%;
+					    transform: scale(1.5);" type="checkbox" name="keepImage" id="keepImageCheckbox">
+				    <label for="keepImageCheckbox">Giữ lại ảnh cũ</label>
 				</div>
 				<div class="action">
 					<button type="submit" class="action-button">Cập nhật</button>

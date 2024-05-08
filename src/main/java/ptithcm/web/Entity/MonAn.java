@@ -18,7 +18,7 @@ public class MonAn {
         this.gia = gia;
         this.img = img;
         this.trangThai = trangThai;
-        this.base64Image = null; // Khởi tạo base64Image là null
+        this.base64Image = null;
     }
 
     @Id
@@ -31,18 +31,13 @@ public class MonAn {
     @Column(name = "gia")
     private BigDecimal gia;
     
-    @Lob // Sử dụng @Lob để lưu trữ dữ liệu lớn
     @Column(name = "img", columnDefinition = "VARBINARY(MAX)")
     private byte[] img;
     
     @Column(name = "trangThai")
     private Boolean trangThai;
     
-    // Thuộc tính để lưu base64 của ảnh
-    @Transient // Đánh dấu không mapping với cột trong database
     private String base64Image;
-
-    // Getters and setters
     public Long getId() {
         return id;
     }
