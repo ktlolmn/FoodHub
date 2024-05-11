@@ -2,12 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lí đơn hàng</title>
+    <title>Quản lí món ăn</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-    	body{
-    		font-family: arial;
-    	}
+	    body{
+	    		font-family: arial;
+	    	}
         .home-oder {
             position: relative;
             background-color: rgba(95, 158, 160, 0.692);
@@ -15,6 +16,7 @@
             margin-top: 40px;
             max-height: 670px;
             display: flex;
+            justify-content: center;
             flex-direction: column;
             align-items:center;
             height: 570px;
@@ -22,108 +24,309 @@
             border-top-left-radius: 25px;
             border-bottom-left-radius: 25px;
         }
-        body {
-		  font-family: 'lato', sans-serif;
-		}
-		.container {
-		  width: 90%;
-		  margin-left: auto;
-		  margin-right: auto;
-		  margin-bottom: 12px;
-		  padding-left: 10px;
-		  padding-right: 10px;
-		  overflow-y: auto;
+
+        .list-items {
+            margin-top: 24px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 2px 3px 10px #838181;
+            background-color:#fff;
+            display: block;
+            list-style: none;
+            height: 90%;
+            width: 80%; 
+            margin-bottom:8px;
+            overflow: auto;
+        }
+        
+        .list-items thead{
+        	background-color: #ccc4c4bf;
+    		border-bottom: 1px #000 solid;
+        }
+        
+        table th{
+        	padding: 8px;
+        }
+        
+        table {
+		    table-layout: fixed;
+		    width: 100%; 
 		}
 		
-		.container::-webkit-scrollbar {
-		    width: 6px; /* Chiều rộng của thanh cuộn */
-		  }
-		  
-		  .container::-webkit-scrollbar-track {
-		    background: #f1f1f1; /* Màu nền của thanh cuộn */
-		  }
-		  
-		  .container::-webkit-scrollbar-thumb {
-		    background: #888; /* Màu của thanh cuộn */
-		    border-radius: 3px; /* Độ cong của viền thanh cuộn */
-		  }
-		  
-		  .container::-webkit-scrollbar-thumb:hover {
-		    background: #555; /* Màu của thanh cuộn khi di chuột qua */
-		  }
+		table th, .table td {
+		    width: auto;
+		}
+		
+		table th:nth-child(1),
+		table td:nth-child(1) {
+		    width: 15%; 
+		}
+		
+		table th:nth-child(2),
+		table td:nth-child(2) {
+		    width: 25%; 
+		}
+		
+		table th:nth-child(3),
+		table td:nth-child(3) {
+		    width: 30%; 
+		}
+		
+		table th:nth-child(4),
+		table td:nth-child(4) {
+		    width: 20%; 
+		}
+		
+		table th:nth-child(5),
+		table td:nth-child(5) {
+		    width: 10%; 
+		}
+        
+        .list-items tbody tr:nth-child(even){
+        	background-color: #e1eeee;
+    		color: #11324D;
+        }
+
+        .list-items::-webkit-scrollbar-thumb {
+            background: #00000069;
+            border-radius: 10px;
+        }
+
+        .list-items::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .list-items::-webkit-scrollbar-track {
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+        
+
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+
+		*, *:after, *:before {
+			box-sizing: border-box;
+		}
+		
+		body {
+			font-family: "DM Sans", sans-serif;
+			background-color: #f1f3fb;
+			padding: 0 2rem;
+		}
 		
 		h2 {
 		  font-size: 26px;
 		  margin: 20px 0;
+		  font-weight:550;
 		  text-align: center;
 		  small {
 		    font-size: 0.5em;
 		  }
 		}
 		
-		.responsive-table {
-		  li {
-		    border-radius: 3px;
-		    padding: 20px 25px;
-		    display: flex;
-		    justify-content: space-between;
-		    margin-bottom: 14px;
-		  }
-		  .table-header {
-		    background-color: #95A5A6;
-		    font-size: 14px;
-		    text-transform: uppercase;
-		    letter-spacing: 0.03em;
-		    font-weight:550;
-		    position: sticky; /* Cố định vị trí */
-		    top: 0; /* Đặt vị trí cố định ở phía trên */
-		    z-index: 1;
-		  }
-		  .table-row {
-		    background-color: #ffffff;
-		    box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.1);
-		  }
-		  .col-1 {
-		    flex-basis: 10%;
-		  }
-		  .col-2 {
-		    flex-basis: 25%;
-		  }
-		  .col-3 {
-		    flex-basis: 35%;
-		  }
-		  .col-4 {
-		    flex-basis: 20%;
-		  }
-		  .col-5 {
-		    flex-basis: 10%;
-		  }
-	}
-</style>
+		h4{
+			font-weight: bold;
+		}
+				
+		td{
+			padding: 8px;
+		}
+		
+		* {
+        box-sizing: border-box;
+      }
+
+      
+      .main-pd-wrapper pre,
+      .main-pd-wrapper p {
+        padding: 0;
+        margin: 0;
+      }
+      .details-table {
+        font-family: arial, sans-serif;
+        width: 100%;
+        border-collapse: collapse;
+        padding: 1px;
+        overflow-y:auto;
+      }
+      
+      .details-table td,
+      .details-table th {
+        text-align: left;
+        padding: 8px 6px;
+      }
+      
+      
+      .main-pd-wrapper {
+        box-shadow: 0 0 10px #ddd;
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 15px;
+        width: 450px;    
+        top: 20px;
+    	position: relative;
+        margin: auto;
+      }
+      
+      button[disabled] {
+	        cursor: not-allowed; 
+	    }
+	    
+	  button{
+	  	cursor:pointer;
+	  }
+	  .search-btn:focus{
+	  	outline:none;
+	  }
+    </style>
 </head>
 <body>
-<div th:include="admin/Fragments/header :: header"></div>
+<div th:replace="admin/Fragments/header :: header"></div>
 <div class="home-oder">
-	<h2>Quản lý đơn hàng</h2>
-    <div class="container">
-	  <ul class="responsive-table">
-	    <li class="table-header">
-	      <div class="col col-1">Mã đơn hàng</div>
-	      <div class="col col-2">Người đặt hàng</div>
-	      <div class="col col-3">Ngày tạo</div>
-	      <div class="col col-4">Trạng thái</div>
-	      <div class="col col-5">Hành động</div>
-	    </li>
-
-	    <li class="table-row" th:each="donHang : ${danhSachDonHang}">
-	      <div class="col col-1" data-label="Mã đơn hàng" th:text="${donHang.id}"></div>
-	      <div class="col col-2" data-label="Người đạt" th:text="${donHang.nguoiDung.thongTinKhachHang.hoTen}"></div>
-	      <div class="col col-3" data-label="Ngày tạo" th:text="${donHang.ngayTao}"></div>
-	      <div class="col col-4" data-label="Trạng thái" th:text="${donHang.trangThai}"></div>
-	      <div class="col col-5" data-label="Hành động"><a th:href="@{/admin/donhang/{id}(id=${donHang.id})}">Xem chi tiết</a></div>
-	    </li>
-	  </ul>
+	<div style="position: absolute;top: 14px;left: 14px;">
+    	<button style="cursor: pointer;
+			    margin: 12px;
+			    padding: 6px;
+			    border-radius: 23px;
+			    background-color: #dee2e6;
+			    box-shadow: 3px 4px 10px grey;
+			    color: #000;
+			    border: 0;" type="button" id="addBtn"><i style="font-size: 16px; margin-right: 4px;" class="fas fa-plus-circle"></i>Thêm mới món ăn</button>
 	</div>
-</div>
+	<div style="position: absolute;top: 14px;right: 14px;">
+		<form action="/admin/donhang/filter" method = 'post'>
+			<input name="keyWord" style="padding: 8px;
+			    outline: none;
+			    border: none;
+			    /* opacity: 51.8; */
+			    font-size: 12px;
+			    border-radius: 30px;" 
+				type="text" id="searchInput" placeholder="Nhập từ khóa...">
+		    <button class="search-btn" type="submit" style="border: none; cursor: pointer; 
+		        cursor: pointer;
+			    margin: 12px 12px 12px -38px;
+			    padding: 1px 5px;
+			    border-radius: 5px;
+			    background-color: #fff;
+			    color: grey;
+			    border: 0;" id="searchBtn"><i style="font-size: 16px; margin-right: 4px;" class="fas fa-search"></i></button>
+		
+		</form>
+	</div>
+    <h2>Danh sách món ăn</h2>
+    <table class="list-items">
+	    <thead>
+	        <tr>
+	            <th>Mã đơn hàng</th>
+	            <th>Ngày tạo</th>
+	            <th>Tên khách hàng</th>
+	            <th>Trạng thái</th>
+	            <th>Chi tiết</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	        <tr th:if="${danhSachDonHang.isEmpty()}">
+	            <td colspan="4" class="empty-message">Danh sách trống.</td>
+	        </tr>
+	        <tr th:each="order : ${danhSachDonHang}">
+	            <td th:text="${order.id}"></td>
+	            <td th:text="${order.ngayTao}"></td>
+	            <td th:text="${order.nguoiDung.thongTinKhachHang.hoTen}"></td>
+	            <td th:text="${order.trangThai}"></td>
+	            <td>
+				   <a th:href="@{/admin/donhang/{id}(id=${order.id})}"><i class="fas fa-info-circle"></i></a>
+				</td>
+	        </tr>
+	    </tbody>
+	</table>
+	</div>
+	
+	<div class="modal-details" style="position: absolute;
+			    top: 0;
+			    left: 0;
+			    right: 0;
+			    bottom:0;
+			    background-color: #00000073;
+				"th:if="${donHang != null or not #lists.isEmpty(chiTietDonHang)}">
+	<section class="main-pd-wrapper">
+		<p style="  position: absolute;
+				    border: none;
+				    cursor: pointer;
+				    background-color: #fff;
+				    font-size: 36px;
+				    top: 0;" class="close-btn" onclick="closeModal()">&times;</p>
+      <div style="
+                  text-align: center;
+                  line-height: 1.5;
+                  font-size: 14px;
+                  color: #4a4a4a;
+                ">
+                <p style="font-weight: bold; color: #000; margin-top: 15px; font-size: 18px;">
+                  Chi tiết đơn hàng
+                </p>
+                <p th:text="${donHang.nguoiDung.thongTinKhachHang.hoTen}"></p>
+                <p>
+                  <b>Email:</b><span th:text="${donHang.nguoiDung.thongTinKhachHang.email}"></span>
+                </p>
+                <p>
+                  <b>Địa chỉ:</b> <span th:text="${donHang.nguoiDung.thongTinKhachHang.diaChi}"></span>
+                </p>
+                <p>
+                  <b>Số điện thoại:</b> <span th:text="${donHang.nguoiDung.thongTinKhachHang.soDienThoai}"></span>
+                </p>
+                <hr style="border: 1px dashed rgb(131, 131, 131); margin: 25px auto">
+              </div>
+              <div style="overflow-x: hidden;
+   				 height: 315px;">
+              	<table class="details-table">
+	                <thead>
+	                  <tr>
+	                    <th style="width: 50px; padding-left: 0;">STT</th>
+	                    <th style="width: 220px;">Tên món ăn</th>
+	                    <th>Số lượng</th>
+	                    <th style="text-align: right; padding-right: 0;">Giá</th>
+	                  </tr>
+	                </thead>
+	                <tbody>
+	            		<tr th:each="chiTiet, chiTietIndex : ${chiTietDonHang}">
+				            <td th:text="${chiTietIndex.index + 1}"></td>
+				            <td th:text="${chiTiet.monAn.ten}"></td>
+				            <td th:text="${chiTiet.soLuong}"></td>
+				            <td th:text="${chiTiet.monAn.gia}"></td>
+				        </tr>              
+	                </tbody>
+	              </table>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+				    <form th:action="@{/admin/donhang/confirm/{id}(id=${donHang.id})}" method="post">
+				        <button style="
+						    margin: 12px;
+						    padding: 6px;
+						    border-radius: 15px;
+						    background-color: #dee2e6;
+						    box-shadow: 3px 4px 10px grey;
+						    color: #000;
+						    border: 0;" type="submit" th:disabled="${donHang.trangThai != 'Chưa xác nhận'}">Xác nhận đơn hàng</button>
+				    </form>
+				    <form th:action="@{/admin/donhang/reject/{id}(id=${donHang.id})}" method="post">
+				        <button style="
+						    margin: 12px;
+						    padding: 6px;
+						    border-radius: 15px;
+						    background-color: #dee2e6;
+						    box-shadow: 3px 4px 10px grey;
+						    color: #000;
+						    border: 0;" type="submit" th:disabled="${donHang.trangThai != 'Chưa xác nhận'}">Từ chối đơn hàng</button>
+				    </form>
+				</div>
+    </section>
+    </div>
+    
 </body>
+<script >
+	function closeModal() {
+	    document.querySelector('.modal-details').style.display = 'none';
+	}
+
+</script>
 </html>

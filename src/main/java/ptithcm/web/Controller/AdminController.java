@@ -105,6 +105,16 @@ public class AdminController {
 		return "redirect:/admin/monan";
 	}
 	
+	@GetMapping("/monan/toggle/{id}")
+    public String toggleMonAn(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        MonAn monAn = monAnService.getMonAnById(id);
+        monAn.setTrangThai(!monAn.getTrangThai());
+        monAnService.saveMonAn(monAn);
+
+        redirectAttributes.addFlashAttribute("message", "Món ăn đã được cập nhật!"); // Optional flash message
+        return "redirect:/admin/monan";
+    }
+	
 	@GetMapping("/monan/xoa/{id}")
 	public String xoaMonAn(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
 	    try{
@@ -127,6 +137,7 @@ public class AdminController {
         model.addAttribute("danhSachDonHang", danhSachDonHang);
         return "admin/donhang";
     }
+    
 
     @GetMapping("/donhang/{id}")
     public String viewChiTietDonHang(@PathVariable("id") Long id, Model model) {
@@ -142,7 +153,9 @@ public class AdminController {
 
         model.addAttribute("donHang", donHang);
         model.addAttribute("chiTietDonHang", chiTietDonHang);
-        return "admin/chitietdonhang";
+        List<DonHang> danhSachDonHang = donHangService.getAllDonHang();
+        model.addAttribute("danhSachDonHang", danhSachDonHang);
+        return "admin/donhang";
     }
 
     @PostMapping("/donhang/confirm/{id}")
@@ -169,5 +182,22 @@ public class AdminController {
         redirectAttributes.addFlashAttribute("successMessage", "Đơn hàng đã được từ chối.");
         return "redirect:/admin/donhang";
     }
+    
+    @PostMapping("/donhang/filter")
+	public String viewDonHangFilter(Model model,
+			@RequestParam("keyWord") String ten) {
+		List<DonHang> danhSachDonHang = donHangService.getAllDonHang();
+		List<DonHang> danhSachDonHangFilter = new ArrayList<DonHang>();
+		for(DonHang donHang: danhSachDonHang) {
+			System.out.print(donHang.getNguoiDung().getThongTinKhachHang().getHoTen());
+			System.out.print(donHang.getNguoiDung().getThongTinKhachHang().getHoTen().toLowerCase().contains(ten.toLowerCase()));
+			if(donHang.getNguoiDung().getThongTinKhachHang().getHoTen().toLowerCase().contains(ten.toLowerCase())) {
+				danhSachDonHangFilter.add(donHang);
+			}
+		}
+		
+		model.addAttribute("danhSachDonHang", danhSachDonHangFilter);
+		return "admin/donhang";
+	}
 
 }
