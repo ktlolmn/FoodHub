@@ -207,7 +207,7 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.4);
-            padding-top: 60px;
+            padding-top: 40px;
         }
 
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
@@ -225,6 +225,9 @@
 		img {
 			max-width: 100%;
 			display: block;
+		}
+		h3{
+			font-size: 20px;
 		}
 		 
 		input {
@@ -472,7 +475,7 @@
 	        </div>
 	        <div class="decrip">
 	            <h5 th:text="${monAn.ten}"></h5>
-	            <p th:text="${monAn.gia}"></p>
+				<p th:text="${monAn.gia}">đ</p>
 	            <button type="button" class="editBtn button-8" th:data-id="${monAn.id}" th:data-ten="${monAn.ten}" th:data-gia="${monAn.gia}">Sửa</button>
 	            
 	        </div>
@@ -488,23 +491,20 @@
 			<form class="card-form" id="editForm" th:action="@{/admin/monan/save}" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="id">
 				<div class="input">
-					<input type="text" name="ten" class="input-field"required/>
+					<input type="text" name="ten" class="input-field" required>
 					<label class="input-label">Tên món ăn</label>
 				</div>
 				<div class="input">
-					<input type="text" name="gia" class="input-field gia" required/>
-					<label class="input-label">Giá</label>
+					<input type="text" name="gia" class="input-field gia" required oninput="formatCurrency(this)">
+					<label class="input-label">Giá (VND)</label>
 				</div>
 				<div class="input">
 					<input id="file" type="file" name="file" required><br>
 					<label class="input-label">Ảnh mô tả</label>
 				</div>
 				<div class="input">
-				    <input style="position: absolute;
-					    left: 35%;
-					    top: 52%;
-					    transform: scale(1.5);" type="checkbox" name="keepImage" id="keepImageCheckbox">
-				    <label for="keepImageCheckbox">Giữ lại ảnh cũ</label>
+					<input style="position: absolute; left: 35%; top: 52%; transform: scale(1.5);" type="checkbox" name="keepImage" id="keepImageCheckbox">
+					<label for="keepImageCheckbox">Giữ lại ảnh cũ</label>
 				</div>
 				<div class="action">
 					<button type="submit" class="action-button">Cập nhật</button>
@@ -513,26 +513,26 @@
 			</form>
 		</div>
 	</div>
-
-    <!-- Modal for add!-->
-    <div class="modal" id="addModal">
+	
+	<!-- Add Modal -->
+	<div class="modal" id="addModal">
 		<div class="card">
-			<h3 style="text-align:center;">Thay đổi thông tin món ăn</h3>
-			<form class="card-form" id="addForm" th:action="@{/admin/monan/save}" method="post" enctype="multipart/form-data">
+			<h3 style="text-align:center;">Thêm mới món ăn</h3>
+			<form class="card-form" id="addForm" th:action="@{/admin/monan/save}" method="post" enctype="multipart/form-data" >
 				<div class="input">
-					<input type="text" name="ten" class="input-field"required/>
+					<input type="text" name="ten" class="input-field" required>
 					<label class="input-label">Tên món ăn</label>
 				</div>
 				<div class="input">
-					<input type="text" name="gia" class="input-field gia" required/>
-					<label class="input-label">Giá</label>
+					<input type="text" name="gia" class="input-field gia" required oninput="formatCurrency(this)">
+					<label class="input-label">Giá (VND)</label>
 				</div>
 				<div class="input">
 					<input type="file" name="file" required><br>
 					<label class="input-label">Ảnh mô tả</label>
 				</div>
 				<div class="action">
-					<button type="submit" class="action-button">Cập nhật</button>
+					<button type="submit" class="action-button">Thêm mới</button>
 					<button id="closeAdd" type="button" class="action-button">Hủy</button>
 				</div>
 			</form>
@@ -551,6 +551,35 @@
 	    };
 	    xhr.send();
 	}
+
+    function formatCurrency(input) {
+        // Remove non-digit characters
+        var value = input.value.replace(/\D/g, '');
+
+        // Format as VND
+        var formatter = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+
+        // Update input value
+        input.value = formatter.format(value);
+    }
+
+	function formatPrice(price) {
+        // Chuyển đổi giá sang số nguyên
+        var integerPrice = parseInt(price);
+
+        // Kiểm tra xem giá có phải là số nguyên không
+        if (isNaN(integerPrice)) {
+            return price; // Nếu không phải số nguyên, trả về giá ban đầu
+        }
+
+        // Format giá tiền, loại bỏ các số thập phân và thêm dấu ,
+        var formattedPrice = integerPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+
+        return formattedPrice;
+    }
 </script>
 
 </body>

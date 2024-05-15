@@ -3,12 +3,23 @@
 <head>
   <title>Đăng ký tài khoản</title>
   <style>
+    body{
+      margin: 0;
+  		font-size: 16px;
+      background-color: #f0f0f0;
+      background-image:  url(/img/bg.png);
+      background-repeat: no-repeat;
+      background-size: cover;
+      font-family: Arial, Helvetica, sans-serif;
+  	}
     .h-custom {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       overflow: hidden;
+      background-color: #00000052;
+      backdrop-filter: blur(3px);
     }
 
     .modal-content-register {
@@ -19,7 +30,6 @@
       padding: 30px;
       text-align: center;
       width: 300px;
-      border: 1px #000 solid;
     }
 
     form {
@@ -27,30 +37,45 @@
       flex-direction: column;
     }
 
+    .block-css{
+      position: relative;
+    }
+
+    .block-css p{
+      left: 0px;
+      position: absolute;
+      bottom: -15%;
+    }
+
     label {
-      margin-top: 10px;
+      margin-top: 20px;
       text-align: left;
+      opacity: .7;
+      font-size: 13px;
     }
 
     input {
       padding: 10px;
+      width: 90%;
       margin-bottom: 20px;
-      border-radius: 5px;
-      border: 1px solid #ced4da;
+      border: none;
+      border-bottom: 1px #000 solid;
+      outline: none;
+      background: none;
     }
 
     button {
-      padding: 6px 20px;
+      padding: 8px 20px;
       border-radius: 5px;
       border: none;
-      background-color: #007bff;
+      background-color: #000;
       color: #fff;
       cursor: pointer;
       margin-top: 20px;
     }
 
     button:hover {
-      background-color: #0056b3;
+      background-color: #4a4b4d;
     }
 
     p {
@@ -58,7 +83,8 @@
     }
 
     p.error-message {
-      color: red;
+      color: rgb(146, 20, 20);
+      font-size: 12px;
     }
 
     p.login-link {
@@ -72,18 +98,29 @@
   </style>
 </head>
 <body>
-<section class="h-custom">
+  <section class="h-custom">
     <div class="container">
         <div class="row d-flex justify-content-center align-items-center">
             <div class="modal-content-register">
               <h3>Đăng ký tài khoản</h3>
-                <form method="POST" th:action="@{/register}">
+                <form id="register-form" method="POST" th:action="@{/register}" onsubmit="return validateRegisterForm()">
                     <label for="tenDangNhap">Tên đăng nhập:</label>
-                    <input type="text" id="tenDangNhap" name="tenDangNhap" placeholder="Nhập tên đăng nhập" required>
+                    <div class="block-css">
+                      <input type="text" id="tenDangNhap" name="tenDangNhap" >
+                      <p class="error-message" id="errorTenDangNhap"></p>
+                    </div>
+
                     <label for="matKhau">Mật khẩu:</label>
-                    <input type="password" id="matKhau" name="matKhau" placeholder="Nhập mật khẩu" required>
+                    <div class="block-css">
+                      <input type="password" id="matKhau" name="matKhau">
+                      <p class="error-message" id="errorMatKhau"></p>
+                    </div>
                     <label for="xacNhanMatKhau">Xác nhận lại mật khẩu:</label>
-                    <input type="password" id="xacNhanMatKhau" name="xacNhanMatKhau" placeholder="Nhập lại mật khẩu" required>
+                    <div class="block-css">
+                      <input type="password" id="xacNhanMatKhau" name="xacNhanMatKhau">
+                      <p class="error-message" id="errorXacNhanMatKhau"></p>
+                    </div>
+
                     <div>
                         <button type="submit">Đăng ký</button>
                         <p class="error-message" th:text="${errorMessage}"></p>
@@ -94,5 +131,57 @@
         </div>
     </div>
 </section>
+
+<script>
+    function validateRegisterForm() {
+        var tenDangNhap = document.getElementById("tenDangNhap").value;
+        var matKhau = document.getElementById("matKhau").value;
+        var xacNhanMatKhau = document.getElementById("xacNhanMatKhau").value;
+
+        var errorTenDangNhap = document.getElementById("errorTenDangNhap");
+        var errorMatKhau = document.getElementById("errorMatKhau");
+        var errorXacNhanMatKhau = document.getElementById("errorXacNhanMatKhau");
+
+        // Reset error messages
+        errorTenDangNhap.innerText = "";
+        errorMatKhau.innerText = "";
+        errorXacNhanMatKhau.innerText = "";
+
+        // Validation logic
+        var isValid = true;
+
+        if (tenDangNhap.trim() === "") {
+            errorTenDangNhap.innerText = "Tên đăng nhập không được bỏ trống";
+            isValid = false;
+        }
+
+        if (matKhau.trim() === "") {
+            errorMatKhau.innerText = "Mật khẩu không được bỏ trống";
+            isValid = false;
+        }
+
+        if (xacNhanMatKhau.trim() === "") {
+            errorXacNhanMatKhau.innerText = "Xác nhận mật khẩu không được bỏ trống";
+            isValid = false;
+        } else if (matKhau !== xacNhanMatKhau) {
+            errorXacNhanMatKhau.innerText = "Xác nhận mật khẩu phải trùng với mật khẩu";
+            isValid = false;
+        }
+
+        // Focus on the first input field with error
+        if (!isValid) {
+            if (tenDangNhap.trim() === "") {
+                document.getElementById("tenDangNhap").focus();
+            } else if (matKhau.trim() === "") {
+                document.getElementById("matKhau").focus();
+            } else {
+                document.getElementById("xacNhanMatKhau").focus();
+            }
+        }
+
+        return isValid;
+    }
+</script>
+
 </body>
 </html>

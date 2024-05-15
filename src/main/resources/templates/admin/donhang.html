@@ -274,6 +274,9 @@
                 <p>
                   <b>Số điện thoại:</b> <span th:text="${donHang.nguoiDung.thongTinKhachHang.soDienThoai}"></span>
                 </p>
+				<p>
+					<b>Tổng tiền:</b><span th:text="'₫ ' + ${#numbers.formatDecimal(tong, 0, 0, 'POINT')}"></span>
+				</p>								
                 <hr style="border: 1px dashed rgb(131, 131, 131); margin: 25px auto">
               </div>
               <div style="overflow-x: hidden;

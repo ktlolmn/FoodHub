@@ -143,15 +143,13 @@ public class AdminController {
     public String viewChiTietDonHang(@PathVariable("id") Long id, Model model) {
         DonHang donHang = donHangService.getDonHangById(id);
         List<ChiTietDonHang> chiTietDonHang = chiTietDonHangService.getChiTietDonHangByDonHangId(donHang.getId());
-        BigDecimal gia = BigDecimal.ZERO;
-
-        for (ChiTietDonHang ct : chiTietDonHang) {
-            gia = gia.add(ct.getMonAn().getGia()); 
-        }
-        
-        System.out.print(gia);
+        Long tong = 0L;
+		for (ChiTietDonHang ct : chiTietDonHang) {
+			tong += ct.getMonAn().getGia();
+		}
 
         model.addAttribute("donHang", donHang);
+		model.addAttribute("tong", tong);
         model.addAttribute("chiTietDonHang", chiTietDonHang);
         List<DonHang> danhSachDonHang = donHangService.getAllDonHang();
         model.addAttribute("danhSachDonHang", danhSachDonHang);

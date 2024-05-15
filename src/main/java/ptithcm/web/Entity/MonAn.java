@@ -11,7 +11,7 @@ public class MonAn {
         super();
     }
 
-    public MonAn(Long id, String ten, BigDecimal gia, byte[] img, Boolean trangThai) {
+    public MonAn(Long id, String ten, Long gia, byte[] img, Boolean trangThai) {
         super();
         this.id = id;
         this.ten = ten;
@@ -29,7 +29,7 @@ public class MonAn {
     private String ten;
     
     @Column(name = "gia")
-    private BigDecimal gia;
+    private Long gia;
     
     @Column(name = "img", columnDefinition = "VARBINARY(MAX)")
     private byte[] img;
@@ -55,11 +55,11 @@ public class MonAn {
     }
 
 
-    public BigDecimal getGia() {
+    public Long getGia() {
         return gia;
     }
 
-    public void setGia(BigDecimal gia) {
+    public void setGia(Long gia) {
         this.gia = gia;
     }
 

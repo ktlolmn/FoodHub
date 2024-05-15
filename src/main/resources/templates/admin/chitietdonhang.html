@@ -113,12 +113,12 @@
     </style>
   </head>
   <body>
-  <div th:include="admin/Fragments/header :: header"></div>
+    <div th:insert="~{admin/Fragments/header :: header}"></div>
 
-<div class="home-oder">
-	<div style="width: 100%; margin-left: 20px;margin-top: 20px;">
-		<a class="back" href="/admin/donhang">TRỞ VỀ</a>
-	</div>
+  <div class="home-oder">
+    <div style="width: 100%; margin-left: 20px;margin-top: 20px;">
+      <a class="back" href="/admin/donhang">TRỞ VỀ</a>
+    </div>
 	<div th:if="${donHang != null and not #lists.isEmpty(chiTietDonHang)}">
     <section class="main-pd-wrapper">
       <div style="
@@ -139,6 +139,9 @@
                 </p>
                 <p>
                   <b>Số điện thoại:</b> <span th:text="${donHang.nguoiDung.thongTinKhachHang.soDienThoai}"></span>
+                </p>
+                <p>
+                  <b>Tổng tiền:</b> <span th:text="${tong}"></span>
                 </p>
                 <hr style="border: 1px dashed rgb(131, 131, 131); margin: 25px auto">
               </div>
