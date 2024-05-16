@@ -31,4 +31,9 @@ public class DonHangServiceImpl implements DonHangService {
     public void deleteDonHang(Long id) {
         donHangRepository.deleteById(id);
     }
+
+    @Override
+    public List<DonHang> getDonHangByTrangThai(String trangThai){
+        return donHangRepository.findByTrangThai(trangThai);
+    }
 }

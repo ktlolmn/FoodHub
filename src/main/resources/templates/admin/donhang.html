@@ -184,17 +184,25 @@
 <div th:replace="admin/Fragments/header :: header"></div>
 <div class="home-oder">
 	<div style="position: absolute;top: 14px;left: 14px;">
-    	<button style="cursor: pointer;
-			    margin: 12px;
-			    padding: 6px;
-			    border-radius: 23px;
-			    background-color: #dee2e6;
-			    box-shadow: 3px 4px 10px grey;
-			    color: #000;
-			    border: 0;" type="button" id="addBtn"><i style="font-size: 16px; margin-right: 4px;" class="fas fa-plus-circle"></i>Thêm mới món ăn</button>
+		<form id="filterForm" action="/admin/donhang/filter" method="post">
+			<select name="trangThai" id="trangThai" style="cursor: pointer;
+					margin: 12px;
+					padding: 6px;
+					border-radius: 23px;
+					background-color: #dee2e6;
+					box-shadow: 3px 4px 10px grey;
+					color: #000;
+					border: 0;" type="button" onchange="document.getElementById('filterForm').submit();">
+				<option value="">-- Chọn trạng thái --</option>
+				<option th:each="trangThai : ${danhSachTrangThai}"
+						th:value="${trangThai}" th:text="${trangThai}">
+				</option>
+				<option value="">-- Tất cả --</option>
+			</select>
+		</form>
 	</div>
 	<div style="position: absolute;top: 14px;right: 14px;">
-		<form action="/admin/donhang/filter" method = 'post'>
+		<form action="/admin/donhang/search" method = 'post'>
 			<input name="keyWord" style="padding: 8px;
 			    outline: none;
 			    border: none;

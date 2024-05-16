@@ -12,4 +12,6 @@ public interface DonHangService {
     DonHang saveDonHang(DonHang donHang);
 
     void deleteDonHang(Long id);
+
+    List<DonHang> getDonHangByTrangThai(String trangThai);
 }

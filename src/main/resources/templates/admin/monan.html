@@ -422,6 +422,17 @@
 		.slider.round:before {
 		  border-radius: 50%;
 		}
+
+		.error {
+            display: none;
+			margin-top: 20px;
+            color: rgb(139, 37, 37);
+        }
+
+		#submitButton:disabled {
+            background-color: grey;
+            cursor: not-allowed;
+        }
 				
     </style>
 </head>
@@ -528,11 +539,12 @@
 					<label class="input-label">Giá (VND)</label>
 				</div>
 				<div class="input">
-					<input type="file" name="file" required><br>
+					<input id="fileInput"  type="file" name="file" required><br>
 					<label class="input-label">Ảnh mô tả</label>
+					<p id="errorFile" class="error">Ảnh không hợp lệ</p>
 				</div>
 				<div class="action">
-					<button type="submit" class="action-button">Thêm mới</button>
+					<button id="addSubmitForm" type="submit" class="action-button">Thêm mới</button>
 					<button id="closeAdd" type="button" class="action-button">Hủy</button>
 				</div>
 			</form>
@@ -540,6 +552,37 @@
 	</div>
 </div>
 <script th:inline="javascript">
+
+	document.getElementById('fileInput').addEventListener('change', function() {
+		var file = this.files[0];
+
+		var errorMessage = document.getElementById('errorFile');
+		var submitButton = document.getElementById('addSubmitForm');
+		var validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+		if (file && !validImageTypes.includes(file.type)) {
+			errorMessage.style.display = 'block';
+			this.value = ''; // Clear the input
+			submitButton.disabled = true; // Disable submit button
+			submitButton.style.cursor = "not-allowed"; // Change cursor style
+		} else {
+			errorMessage.style.display = 'none';
+			submitButton.disabled = false; // Enable submit button
+			submitButton.style.cursor = "pointer"; // Change cursor style
+		}
+	});
+	function validateForm() {
+		const fileInput = document.getElementById('file');
+		const filePath = fileInput.value;
+		const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+		if (!allowedExtensions.exec(filePath)) {
+			alert('Vui lòng chọn file hình ảnh (jpg, jpeg, png, gif)');
+			fileInput.value = '';
+			return false;
+		}
+		return true;
+	}
+
 	function toggleMonAn(checkbox) {
 	    var monAnId = checkbox.getAttribute('data-monan-id');
 	    var isChecked = checkbox.checked;

@@ -14,11 +14,12 @@ import ptithcm.web.Service.ChiTietDonHangService;
 import ptithcm.web.Service.DonHangService;
 import ptithcm.web.Service.MonAnService;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -134,7 +135,30 @@ public class AdminController {
     @GetMapping("/donhang")
     public String viewDonHang(Model model) {
         List<DonHang> danhSachDonHang = donHangService.getAllDonHang();
+		Set<String> danhSachTrangThai = danhSachDonHang.stream()
+            .map(DonHang::getTrangThai)
+            .collect(Collectors.toSet());
+		
+		model.addAttribute("danhSachTrangThai", danhSachTrangThai);
         model.addAttribute("danhSachDonHang", danhSachDonHang);
+        return "admin/donhang";
+    }
+
+	@PostMapping("/donhang/filter")
+    public String filterDonHang(@RequestParam("trangThai") String trangThai, Model model) {
+        List<DonHang> danhSachDonHang;
+
+        if (trangThai == null || trangThai.isEmpty()) {
+            danhSachDonHang = donHangService.getAllDonHang();
+        } else {
+            danhSachDonHang = donHangService.getDonHangByTrangThai(trangThai);
+        }
+        Set<String> danhSachTrangThai = donHangService.getAllDonHang().stream()
+                .map(DonHang::getTrangThai)
+                .collect(Collectors.toSet());
+
+        model.addAttribute("danhSachDonHang", danhSachDonHang);
+        model.addAttribute("danhSachTrangThai", danhSachTrangThai);
         return "admin/donhang";
     }
     
@@ -181,7 +205,7 @@ public class AdminController {
         return "redirect:/admin/donhang";
     }
     
-    @PostMapping("/donhang/filter")
+    @PostMapping("/donhang/search")
 	public String viewDonHangFilter(Model model,
 			@RequestParam("keyWord") String ten) {
 		List<DonHang> danhSachDonHang = donHangService.getAllDonHang();
