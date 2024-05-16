@@ -18,9 +18,6 @@ public class ThongTinKhachHang {
     @Column(name = "hoTen", columnDefinition = "nvarchar(225)")
     private String hoTen;
     
-    @Column(name = "diaChi", columnDefinition = "nvarchar(MAX)")
-    private String diaChi;
-    
     @Column(name = "soDienThoai")
     private String soDienThoai;
 
@@ -56,14 +53,6 @@ public class ThongTinKhachHang {
 		this.email = email;
 	}
 
-	public String getDiaChi() {
-		return diaChi;
-	}
-
-	public void setDiaChi(String diaChi) {
-		this.diaChi = diaChi;
-	}
-
 	public String getSoDienThoai() {
 		return soDienThoai;
 	}
@@ -72,12 +61,11 @@ public class ThongTinKhachHang {
 		this.soDienThoai = soDienThoai;
 	}
 
-	public ThongTinKhachHang(Long id, NguoiDung nguoiDung, String email, String diaChi, String soDienThoai, String hoTen) {
+	public ThongTinKhachHang(Long id, NguoiDung nguoiDung, String email, String soDienThoai, String hoTen) {
 		super();
 		this.id = id;
 		this.nguoiDung = nguoiDung;
 		this.email = email;
-		this.diaChi = diaChi;
 		this.soDienThoai = soDienThoai;
 		this.hoTen = hoTen;
 	}

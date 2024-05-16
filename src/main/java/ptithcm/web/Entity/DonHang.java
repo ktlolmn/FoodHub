@@ -10,12 +10,13 @@ public class DonHang {
 		super();
 	}
 
-	public DonHang(Long id, NguoiDung nguoiDung, LocalDateTime ngayTao, String trangThai) {
+	public DonHang(Long id, NguoiDung nguoiDung, LocalDateTime ngayTao, String trangThai, String diaChi) {
 		super();
 		this.id = id;
 		this.nguoiDung = nguoiDung;
 		this.ngayTao = ngayTao;
 		this.trangThai = trangThai;
+		this.diaChi = diaChi;
 	}
 
 	@Id
@@ -28,6 +29,9 @@ public class DonHang {
     
     @Column(name = "ngayTao")
     private LocalDateTime ngayTao;
+
+	@Column(name = "diaChi", columnDefinition = "nvarchar(MAX)")
+    private String diaChi;
     
     @Column(name = "trangThai", columnDefinition = "nvarchar(225)")
     private String trangThai;
@@ -55,6 +59,15 @@ public class DonHang {
 	public void setNgayTao(LocalDateTime ngayTao) {
 		this.ngayTao = ngayTao;
 	}
+
+	public String getDiaChi() {
+		return diaChi;
+	}
+
+	public void setDiaChi(String diaChi) {
+		this.diaChi = diaChi;
+	}
+
 
 	public String getTrangThai() {
 		return trangThai;
