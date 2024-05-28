@@ -590,7 +590,7 @@
 	    var xhr = new XMLHttpRequest();
 	    xhr.open('GET', '/admin/monan/toggle/' + monAnId, true);
 	    xhr.onload = function () {
-	    	window.location.reload();
+	    	window.location.href = '/admin/monan';
 	    };
 	    xhr.send();
 	}
