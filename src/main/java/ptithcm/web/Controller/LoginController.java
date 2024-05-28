@@ -58,7 +58,7 @@ public class LoginController {
                 return "redirect:/admin/monan";
             } else {
                 session.setAttribute("role", "User");
-                return "redirect:/user";
+                return "redirect:/user/main";
             }
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "Tên đăng nhập hoặc mật khẩu không đúng!");
