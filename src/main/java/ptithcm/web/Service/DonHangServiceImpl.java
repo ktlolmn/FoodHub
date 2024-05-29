@@ -62,7 +62,7 @@ public class DonHangServiceImpl implements DonHangService {
         DonHang donHang = new DonHang();
         donHang.setNguoiDung(nguoiDung);
         donHang.setDiaChi(address);
-        donHang.setTrangThai("Pending");
+        donHang.setTrangThai("Chưa xác nhận");
         donHang.setNgayTao(LocalDateTime.now());
         donHangRepository.save(donHang);
 
@@ -74,5 +74,15 @@ public class DonHangServiceImpl implements DonHangService {
             chiTietDonHang.setSoLuong(1); // Giả sử số lượng là 1, có thể thay đổi nếu cần
             chiTietDonHangRepository.save(chiTietDonHang);
         }
+    }
+
+	@Override
+	public List<DonHang> findAllByTenDangNhap(String tenDangNhap) {
+		return donHangRepository.findAllByNguoiDungTenDangNhap(tenDangNhap);
+	}
+	
+	@Override
+	public List<DonHang> findAllByNguoiDungId(Long nguoiDungId) {
+        return donHangRepository.findAllByNguoiDungId(nguoiDungId);
     }
 }

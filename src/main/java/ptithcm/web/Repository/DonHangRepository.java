@@ -6,4 +6,6 @@ import ptithcm.web.Entity.DonHang;
 
 public interface DonHangRepository extends JpaRepository<DonHang, Long> {
     List<DonHang> findByTrangThai(String trangThai);
+    List<DonHang> findAllByNguoiDungTenDangNhap(String tenDangNhap);
+    List<DonHang> findAllByNguoiDungId(Long nguoiDungId);
 }
