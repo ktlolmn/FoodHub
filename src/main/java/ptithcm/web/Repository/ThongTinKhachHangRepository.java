@@ -4,5 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ptithcm.web.Entity.ThongTinKhachHang;
 
 public interface ThongTinKhachHangRepository extends JpaRepository<ThongTinKhachHang, Long> {
-    // Các phương thức tùy chỉnh khác nếu cần
+    ThongTinKhachHang findThongTinKhachHangByNguoiDungId(Long id);
+    ThongTinKhachHang findByEmail(String email);
 }

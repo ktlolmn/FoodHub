@@ -9,10 +9,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,8 +23,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import ptithcm.web.Entity.DonHang;
 import ptithcm.web.Entity.MonAn;
+import ptithcm.web.Entity.NguoiDung;
+import ptithcm.web.Entity.ThongTinKhachHang;
 import ptithcm.web.Service.DonHangService;
 import ptithcm.web.Service.MonAnService;
+import ptithcm.web.Service.NguoiDungService;
+import ptithcm.web.Service.ThongTinKhachHangService;
 
 @Controller
 @RequestMapping("/user")
@@ -32,6 +39,12 @@ public class UserController {
 	
 	@Autowired
 	private DonHangService donHangService;
+
+	@Autowired
+	private NguoiDungService nguoiDungService;
+
+	@Autowired
+	private ThongTinKhachHangService thongTinKhachHangService;
 	
 	@GetMapping("/main")
 	public String viewMonAn(Model model) {
@@ -56,11 +69,12 @@ public class UserController {
     }
 
 	@PostMapping("/confirm-order")
-    public String confirmOrder(HttpServletRequest request,
+    public String confirmOrder(@SessionAttribute(name = "username") String tenDangNhap,HttpServletRequest request,
     		@RequestParam("foodIds") String foodIds, @RequestParam("total") Double total, @RequestParam("address") String address) {
         try {
         	// Lấy ID người dùng từ session
-        	Long userId = (Long) request.getSession().getAttribute("userId");
+			NguoiDung nguoiDung = nguoiDungService.findByTenDangNhap(tenDangNhap);
+        	Long userId = nguoiDung.getId();
         	
         	// Log the userId
             System.out.println("User ID: " + userId);
@@ -89,4 +103,48 @@ public class UserController {
 		
 		return "user/xemdon";
 	}
+
+	@GetMapping("/infor")
+	public String getMethodName(@SessionAttribute(name = "username") String tenDangNhap, Model model) {
+		NguoiDung nguoiDung = nguoiDungService.findByTenDangNhap(tenDangNhap);
+        ThongTinKhachHang thongTinKhachHang = thongTinKhachHangService.getThongTinKhachHangByNguoiDungId(nguoiDung.getId());
+		model.addAttribute("thongTinKhachHang", thongTinKhachHang);
+		return "user/infor";
+	}
+	@PostMapping("/infor/save")
+public String saveThongTinCaNhan(@SessionAttribute(name = "username") String tenDangNhap,
+                                  @ModelAttribute("thongTinKhachHang") ThongTinKhachHang thongTinKhachHang,
+                                  BindingResult bindingResult,
+                                  Model model) {
+    // Kiểm tra nếu có lỗi trong việc binding dữ liệu
+	System.out.println(thongTinKhachHang.getHoTen());
+	System.out.println(thongTinKhachHang.getEmail());
+	System.out.println(thongTinKhachHang.getSoDienThoai());
+	System.out.println(thongTinKhachHang.getNguoiDung());
+	System.out.println(thongTinKhachHang.getId());
+
+
+    
+    // Thực hiện lưu thông tin cá nhân vào cơ sở dữ liệu
+    try {
+        NguoiDung nguoiDung = nguoiDungService.findByTenDangNhap(tenDangNhap);
+        if (thongTinKhachHang.getNguoiDung() == null) {
+			thongTinKhachHang.setNguoiDung(nguoiDung);
+		}
+		if (thongTinKhachHangService.isEmailDuplicated(thongTinKhachHang.getEmail(), thongTinKhachHang.getNguoiDung().getId())) {
+			model.addAttribute("error", "Đã xảy ra lỗi khi lưu thông tin cá nhân.");
+		}
+        thongTinKhachHangService.saveThongTinKhachHang(thongTinKhachHang);
+        model.addAttribute("success", "Lưu thông tin cá nhân thành công.");
+    } catch (Exception e) {
+        model.addAttribute("error", "Đã xảy ra lỗi khi lưu thông tin cá nhân.");
+        e.printStackTrace(); // Log lỗi ra console
+    }
+    
+    return "redirect:/user/infor";
+}
+
+
+
+	
 }

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin người dùng</title>
+</head>
+<style>
+    /* Modal chi tiết */
+.modal-details {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-pd-wrapper {
+    position: relative;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.close-btn {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    margin: 0;
+    border: none;
+    cursor: pointer;
+    background-color: #fff;
+    font-size: 36px;
+    line-height: 36px;
+    color: #000;
+}
+
+.modal-content {
+    text-align: center;
+    line-height: 1.5;
+    font-size: 14px;
+    color: #4a4a4a;
+    margin-top: 26px;
+}
+
+.modal-content label {
+    display: inline-block;
+    width: 100px; /* Đặt chiều rộng cố định cho nhãn để canh thẳng hàng với các ô nhập liệu */
+    text-align: left;
+    padding-right: 10px;
+}
+
+.modal-content input {
+    width: calc(100% - 10px); /* Đảm bảo ô nhập liệu không bị tràn ra ngoài nhãn */
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.divider {
+    border: 1px dashed #838383;
+    margin: 25px auto;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.action-btn {
+    margin: 12px;
+    padding: 6px 18px;
+    border-radius: 3px;
+    background-color: #dee2e6;
+    box-shadow: 3px 4px 10px #80808036;
+    color: #000;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.action-btn:hover {
+    background-color: #ced4da;
+}
+
+.action-btn:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+.home-oder {
+    position: relative;
+    background-color: rgba(95, 158, 160, 0.692);
+    margin-left: 270px;
+    margin-top: 40px;
+    max-height: 670px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items:center;
+    height: 570px;
+    padding: 0;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+}
+
+</style>
+<body>
+    <div th:insert="~{admin/Fragments/header :: header}"></div>
+    <div class="home-oder">
+        <div class="modal-details">
+            <section class="main-pd-wrapper">
+                <p class="close-btn" onclick="closeModal()">&times;</p>
+                <div class="modal-content">
+                    <h2>Thông tin người dùng</h2>
+                    <form id="infoForm" th:action="@{infor/save}" method="post" th:object="${thongTinKhachHang}">
+                        <div class="form-group">
+                            <label for="hoTen">Họ tên:</label>
+                            <input type="text" id="hoTen" name="hoTen" th:value="${thongTinKhachHang != null ? thongTinKhachHang.hoTen : ''}" required>
+                            <input hidden type="text" id="idNguoiDung" name="nguoiDung" th:value="${thongTinKhachHang != null ? thongTinKhachHang.nguoiDung : ''}" required>
+                            <input hidden type="text" id="id" name="id" th:value="${thongTinKhachHang != null ? thongTinKhachHang.id : ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" th:value="${thongTinKhachHang != null ? thongTinKhachHang.email : ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sdt">Số điện thoại:</label>
+                            <input type="tel" id="sdt" name="soDienThoai" th:value="${thongTinKhachHang != null ? thongTinKhachHang.soDienThoai : ''}" required>
+                        </div>
+                        <p th:text="${error}"></p>
+                        <p th:text="${success}"></p>
+
+                        <hr class="divider">
+                        <div class="button-container edit-submit">
+                            <button class="action-btn" onclick="closeModal()">Hủy</button>
+                            
+                            <button id="saveButton" class="action-btn" type="submit" disabled>Lưu</button>
+        
+                        </div>  
+                    </form>
+                </div>                
+                
+                  
+            </section>
+        </div>
+    </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const hoTenInput = document.getElementById('hoTen');
+        const emailInput = document.getElementById('email');
+        const sdtInput = document.getElementById('sdt');
+        const saveButton = document.getElementById('saveButton');
+
+        function checkInputs() {
+            if (hoTenInput.value !== '' || emailInput.value !== '' || sdtInput.value !== '') {
+                saveButton.disabled = true;
+            } else {
+                saveButton.disabled = false;
+            }
+        }
+
+        hoTenInput.addEventListener('focus', function() {
+            saveButton.disabled = false;
+        });
+
+        emailInput.addEventListener('focus', function() {
+            saveButton.disabled = false;
+        });
+
+        sdtInput.addEventListener('focus', function() {
+            saveButton.disabled = false;
+        });
+
+        checkInputs();
+        function closeModal() {
+            document.querySelector('.modal-details').style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>
