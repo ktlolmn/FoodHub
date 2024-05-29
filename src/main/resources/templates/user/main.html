@@ -300,6 +300,7 @@
 </head>
 <body>
 	<div th:insert="~{user/Fragments/header :: header}"></div>
+	
 	<div>
 	    <div class="home-oder">
 	        <ul style="overflow:auto;" class="list-items">
@@ -458,6 +459,11 @@
 	            toast.className = toast.className.replace("show", "");
 	        }, 3000); // Hiển thị Toast trong 3 giây
 	    }
+		
+		var currentURL = window.location.href;
+		if (currentURL.includes("error") || currentURL.includes("success")) {
+			showToast("Vui lòng nhập thông tin cá nhân trong hồ sơ");
+		}
 	
 	</script>
 </body>

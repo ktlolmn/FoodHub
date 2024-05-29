@@ -12,19 +12,23 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
+import ptithcm.web.Entity.ChiTietDonHang;
 import ptithcm.web.Entity.DonHang;
 import ptithcm.web.Entity.MonAn;
 import ptithcm.web.Entity.NguoiDung;
 import ptithcm.web.Entity.ThongTinKhachHang;
+import ptithcm.web.Service.ChiTietDonHangService;
 import ptithcm.web.Service.DonHangService;
 import ptithcm.web.Service.MonAnService;
 import ptithcm.web.Service.NguoiDungService;
@@ -39,6 +43,9 @@ public class UserController {
 	
 	@Autowired
 	private DonHangService donHangService;
+	
+	@Autowired
+	private ChiTietDonHangService chiTietDonHangService;
 
 	@Autowired
 	private NguoiDungService nguoiDungService;
@@ -62,10 +69,19 @@ public class UserController {
 	}
 	///////////////////
 	@PostMapping("/save-order")
-    public String saveOrder(@RequestParam("foodIds") String foodIds, @RequestParam("total") String total, Model model) {
-        model.addAttribute("foodIds", foodIds);
-        model.addAttribute("total", total);
-        return "user/save-order";
+    public String saveOrder(@SessionAttribute(name = "username") String tenDangNhap,
+    		@RequestParam("foodIds") String foodIds,
+    		@RequestParam("total") String total, Model model, RedirectAttributes redirectAttributes) {
+		NguoiDung nguoiDung = nguoiDungService.findByTenDangNhap(tenDangNhap);
+		ThongTinKhachHang thongTinKhachHang = thongTinKhachHangService.getThongTinKhachHangByNguoiDungId(nguoiDung.getId());
+		if (thongTinKhachHang != null) {
+			model.addAttribute("foodIds", foodIds);
+	        model.addAttribute("total", total);
+	        return "user/save-order";
+		}else {
+			redirectAttributes.addFlashAttribute("message", "Vui lòng nhập thông tin cá nhân");
+	        return "redirect:/user/main?error?";
+		}
     }
 
 	@PostMapping("/confirm-order")
@@ -99,9 +115,40 @@ public class UserController {
     }
 	////////////////////
 	@GetMapping("/xemdon")
-	public String view() {
-		return "user/xemdon";
+
+	public String viewMonAn(Model model, @SessionAttribute(name = "username") String tenDangNhap) {
+		// Lấy thông tin người dùng từ tên đăng nhập
+	    NguoiDung nguoiDung = nguoiDungService.findByTenDangNhap(tenDangNhap);
+	    
+	    // Lấy danh sách đơn hàng theo ID người dùng
+	    List<DonHang> danhSachDonHang = donHangService.findAllByNguoiDungId(nguoiDung.getId());
+	    
+	    // Thêm danh sách đơn hàng vào model
+	    model.addAttribute("danhSachDonHang", danhSachDonHang);
+	    
+	    // Trả về tên view để hiển thị danh sách đơn hàng
+	    return "user/xemdon";
+
 	}
+	
+	@GetMapping("/xemdon/{id}")
+    public String viewChiTietDonHang(@PathVariable("id") Long id,
+    		@SessionAttribute(name = "username") String tenDangNhap, Model model) {
+		NguoiDung nguoiDung = nguoiDungService.findByTenDangNhap(tenDangNhap);
+        DonHang donHang = donHangService.getDonHangById(id);
+        List<ChiTietDonHang> chiTietDonHang = chiTietDonHangService.getChiTietDonHangByDonHangId(donHang.getId());
+        List<DonHang> danhSachDonHang = donHangService.findAllByNguoiDungId(nguoiDung.getId());
+        Long tong = 0L;
+		for (ChiTietDonHang ct : chiTietDonHang) {
+			tong += ct.getMonAn().getGia();
+		}
+
+        model.addAttribute("donHang", donHang);
+		model.addAttribute("tong", tong);
+        model.addAttribute("chiTietDonHang", chiTietDonHang);
+        model.addAttribute("danhSachDonHang", danhSachDonHang);
+        return "user/xemdon";
+    }
 
 	@GetMapping("/infor")
 	public String getMethodName(@SessionAttribute(name = "username") String tenDangNhap, Model model) {
