@@ -100,7 +100,6 @@ public class UserController {
 	////////////////////
 	@GetMapping("/xemdon")
 	public String view() {
-		
 		return "user/xemdon";
 	}
 

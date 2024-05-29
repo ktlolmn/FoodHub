@@ -2,7 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>Thông tin người dùng</title>
 </head>
 <style>
@@ -17,6 +18,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
 }
 
 .main-pd-wrapper {
@@ -48,6 +51,7 @@
     font-size: 14px;
     color: #4a4a4a;
     margin-top: 26px;
+    border: none;
 }
 
 .modal-content label {
@@ -107,7 +111,7 @@
 .home-oder {
     position: relative;
     background-color: rgba(95, 158, 160, 0.692);
-    margin-left: 270px;
+    margin-left: 290px;
     margin-top: 40px;
     max-height: 670px;
     display: flex;
@@ -126,9 +130,8 @@
     <div class="home-oder">
         <div class="modal-details">
             <section class="main-pd-wrapper">
-                <p class="close-btn" onclick="closeModal()">&times;</p>
                 <div class="modal-content">
-                    <h2>Thông tin người dùng</h2>
+                    <h4>Thông tin người dùng</h4>
                     <form id="infoForm" th:action="@{infor/save}" method="post" th:object="${thongTinKhachHang}">
                         <div class="form-group">
                             <label for="hoTen">Họ tên:</label>
