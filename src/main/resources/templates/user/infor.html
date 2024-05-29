@@ -136,8 +136,8 @@
                         <div class="form-group">
                             <label for="hoTen">Họ tên:</label>
                             <input type="text" id="hoTen" name="hoTen" th:value="${thongTinKhachHang != null ? thongTinKhachHang.hoTen : ''}" required>
-                            <input hidden type="text" id="idNguoiDung" name="nguoiDung" th:value="${thongTinKhachHang != null ? thongTinKhachHang.nguoiDung : ''}" required>
-                            <input hidden type="text" id="id" name="id" th:value="${thongTinKhachHang != null ? thongTinKhachHang.id : ''}" required>
+                            <input type="text" id="idNguoiDung" name="nguoiDung" th:value="${thongTinKhachHang != null ? thongTinKhachHang.nguoiDung : ''}" style="display: none;">
+                            <input type="text" id="id" name="id" th:value="${thongTinKhachHang != null ? thongTinKhachHang.id : ''}" style="display: none;">
                         </div>
                         <div class="form-group">
                             <label for="email">Email:</label>
@@ -153,9 +153,7 @@
                         <hr class="divider">
                         <div class="button-container edit-submit">
                             <button class="action-btn" onclick="closeModal()">Hủy</button>
-                            
-                            <button id="saveButton" class="action-btn" type="submit" disabled>Lưu</button>
-        
+                            <button id="saveButton" class="action-btn" type="submit">Lưu</button>
                         </div>  
                     </form>
                 </div>                
@@ -193,9 +191,6 @@
         });
 
         checkInputs();
-        function closeModal() {
-            document.querySelector('.modal-details').style.display = 'none';
-        }
     });
 </script>
 

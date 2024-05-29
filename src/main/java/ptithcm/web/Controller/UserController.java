@@ -115,16 +115,6 @@ public String saveThongTinCaNhan(@SessionAttribute(name = "username") String ten
                                   @ModelAttribute("thongTinKhachHang") ThongTinKhachHang thongTinKhachHang,
                                   BindingResult bindingResult,
                                   Model model) {
-    // Kiểm tra nếu có lỗi trong việc binding dữ liệu
-	System.out.println(thongTinKhachHang.getHoTen());
-	System.out.println(thongTinKhachHang.getEmail());
-	System.out.println(thongTinKhachHang.getSoDienThoai());
-	System.out.println(thongTinKhachHang.getNguoiDung());
-	System.out.println(thongTinKhachHang.getId());
-
-
-    
-    // Thực hiện lưu thông tin cá nhân vào cơ sở dữ liệu
     try {
         NguoiDung nguoiDung = nguoiDungService.findByTenDangNhap(tenDangNhap);
         if (thongTinKhachHang.getNguoiDung() == null) {

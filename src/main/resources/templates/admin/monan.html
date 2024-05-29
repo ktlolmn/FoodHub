@@ -128,7 +128,7 @@
             float: left;
             border-radius: 10px;
             overflow: hidden;
-            height: 280px;
+            height: 285px;
  			transition: .3s;
         }
 
@@ -337,6 +337,10 @@
 				text-decoration: none;
 			}
 		}
+
+		.decrip h5{
+			height: 50px;
+		}
 		
 		
 		.bg-red{
@@ -486,7 +490,7 @@
 	        </div>
 	        <div class="decrip">
 	            <h5 th:text="${monAn.ten}"></h5>
-				<p th:text="${monAn.gia}">đ</p>
+				<p th:text="${monAn.gia} + 'đ'"></p>
 	            <button type="button" class="editBtn button-8" th:data-id="${monAn.id}" th:data-ten="${monAn.ten}" th:data-gia="${monAn.gia}">Sửa</button>
 	            
 	        </div>
