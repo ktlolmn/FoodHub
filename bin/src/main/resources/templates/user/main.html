@@ -11,7 +11,7 @@
 	        display: flex;
 	        justify-content: space-around;
 	        background-color: rgba(95, 158, 160, 0.692);
-	        margin-left: 280px;
+	        margin-left: 270px;
 	        margin-top: 40px;
 	        max-height: 670px;
 	        height: 570px;
@@ -306,18 +306,11 @@
 	            </div>
 	        </div>
 	    </div>
-		<!-- 
-	    <form id="orderForm" action="/user/save-order" method="POST">
-	        
+	    <form id="orderForm" action="home/save-order" method="POST">
+	        <!-- Các trường form -->
 	        <input type="hidden" name="foodIds" id="foodIdsField">
 	        <input type="hidden" name="total" id="totalId">
-	    </form>	
-		-->
-		<form id="orderForm" th:action="@{/user/save-order}" method="POST">
-			<!-- Các trường form -->
-			<input type="hidden" name="foodIds" id="foodIdsField">
-			<input type="hidden" name="total" id="totalId">
-		</form>
+	    </form>
 	
 	    <div id="toast"></div>
 	

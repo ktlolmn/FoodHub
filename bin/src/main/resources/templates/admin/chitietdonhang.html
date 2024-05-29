@@ -5,151 +5,182 @@
     <title>Chi tiết đơn hàng</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-    	body{
-    		font-family: arial;
-    	}
-        .home-oder {
+    .home-oder {
+        	max-width: 80%;
             position: relative;
             background-color: rgba(95, 158, 160, 0.692);
-            margin-left: 270px;
+            margin-left: 284px;
             margin-top: 40px;
             max-height: 670px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            height: 570px;
+            height: 560px;
             padding: 0;
             border-top-left-radius: 25px;
             border-bottom-left-radius: 25px;
+            overflow-y:auto;
+            overflow-x: hidden;
         }
+      * {
+        box-sizing: border-box;
+      }
 
-        form > button {
-            cursor: pointer; 
-            margin: 12px; 
-            padding: 8px;
-            border-radius: 5px; 
-            background-color: rgba(122, 71, 23, 0.671); 
-            box-shadow: 3px 4px 10px grey;
-        }
-        .back{
-        	color: #000;
-        	font-size:16px;
-        	font-weight:550;
-        }
-        button[disabled] {
-	        cursor: not-allowed; /* Sử dụng con trỏ không cho nút bị vô hiệu hóa */
-	    }
-	    .container {
-		  width: 90%;
-		  margin-left: auto;
-		  margin-right: auto;
-		  padding-left: 10px;
-		  padding-right: 10px;
-		  overflow-y: auto;
-		}
-		
-		.container::-webkit-scrollbar {
-		    width: 6px; /* Chiều rộng của thanh cuộn */
-		  }
-		  
-		  .container::-webkit-scrollbar-track {
-		    background: #f1f1f1; /* Màu nền của thanh cuộn */
-		  }
-		  
-		  .container::-webkit-scrollbar-thumb {
-		    background: #888; /* Màu của thanh cuộn */
-		    border-radius: 3px; /* Độ cong của viền thanh cuộn */
-		  }
-		  
-		  .container::-webkit-scrollbar-thumb:hover {
-		    background: #555; /* Màu của thanh cuộn khi di chuột qua */
-		  }
-		
-		h2 {
-		  font-size: 26px;
-		  margin: 20px 0;
-		  text-align: center;
-		  small {
-		    font-size: 0.5em;
-		  }
-		}
-		
-		.responsive-table {
-		  li {
-		    border-radius: 3px;
-		    padding: 12px 25px;
-		    display: flex;
-		    justify-content: space-between;
-		    margin-bottom: 8px;
-		  }
-		  .table-header {
-		    background-color: #95A5A6;
-		    font-size: 14px;
-		    text-transform: uppercase;
-		    letter-spacing: 0.03em;
-		    font-weight:550;
-		    position: sticky; /* Cố định vị trí */
-		    top: 0; /* Đặt vị trí cố định ở phía trên */
-		    z-index: 1;
-		  }
-		  .table-row {
-		    background-color: #ffffff;
-		    box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.1);
-		  }
-		  .col-1 {
-		    flex-basis: 55%;
-		  }
-		  .col-2 {
-		    flex-basis: 20%;
-		  }
-		  .col-3 {
-		    flex-basis: 25%;
-		  }
-	}
+      .table-bordered td,
+      .table-bordered th {
+        border: 1px solid #ddd;
+        padding: 10px;
+        word-break: break-all;
+      }
+
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        font-size: 16px;
+      }
+      .h4-14 h4 {
+        font-size: 12px;
+        margin-top: 0;
+        margin-bottom: 5px;
+      }
+      
+      .main-pd-wrapper pre,
+      .main-pd-wrapper p {
+        /* width: 99%; */
+        /* overflow: auto; */
+        /* bpicklist: 1px solid #aaa; */
+        padding: 0;
+        margin: 0;
+      }
+      .details-table {
+        font-family: arial, sans-serif;
+        width: 100%;
+        border-collapse: collapse;
+        padding: 1px;
+        overflow-x:auto;
+      }
+      .hm-p p {
+        text-align: left;
+        padding: 1px;
+        padding: 5px 4px;
+      }
+      .details-table td,
+      .details-table th {
+        text-align: left;
+        padding: 8px 6px;
+      }
+      .table-b td,
+      .table-b th {
+        border: 1px solid #ddd;
+      }
+      .hm-p td,
+      .hm-p th {
+        padding: 3px 0px;
+      }
+      .cropped {
+        float: right;
+        margin-bottom: 20px;
+        height: 100px; /* height of container */
+        overflow: hidden;
+      }
+      .cropped img {
+        width: 400px;
+        margin: 8px 0px 0px 80px;
+      }
+      .main-pd-wrapper {
+        box-shadow: 0 0 10px #ddd;
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 15px;
+        width: 450px;
+        margin: auto;
+      }
+      .table-bordered td,
+      .table-bordered th {
+        border: 1px solid #ddd;
+        padding: 10px;
+        font-size: 14px;
+      }
+      .invoice-items {
+        font-size: 14px;
+        border-top: 1px dashed #ddd;
+      }
+      .invoice-items td{
+        padding: 14px 0;
+       
+      }
     </style>
-</head>
-<body>
-<div th:include="admin/Fragments/header :: header"></div>
+  </head>
+  <body>
+    <div th:insert="~{admin/Fragments/header :: header}"></div>
 
-<div class="home-oder">
-	<div style="width: 100%; margin-left: 20px;margin-top: 20px;">
-		<a class="back" href="/admin/donhang">TRỞ VỀ</a>
-	</div>
-    <h3>Thông tin đặt hàng</h3>
-    <div style="border:1px grey solid;display: flex;background-color: azure;border-radius: 15px;flex-direction: column;justify-content: center;align-items: center;width: 70%;height: 80%;font-size: 20px;">
-    	<div>
-	        <p>Tên: <span th:text="${donHang.nguoiDung.thongTinKhachHang.hoTen}"></span></p>
-	        <p>Email: <span th:text="${donHang.nguoiDung.thongTinKhachHang.email}"></span></p>
-	        <p>Địa chỉ: <span th:text="${donHang.nguoiDung.thongTinKhachHang.diaChi}"></span></p>
-	        <p>Số điện thoại: <span th:text="${donHang.nguoiDung.thongTinKhachHang.soDienThoai}"></span></p>
-	    </div>
-	    <div style="max-height: 350px; overflow-y: auto; width: 100%; border-radius: 15px;display: flex;
-    			justify-content: center;margin-top:10px;">
-		    <div class="container">
-			  <ul class="responsive-table">
-			    <li class="table-header">
-			      <div class="col col-1">Món ăn</div>
-			      <div class="col col-2">Số lượng</div>
-			      <div class="col col-3">Giá</div>
-			    </li>
-		
-			    <li class="table-row" th:each="chiTiet : ${chiTietDonHang}">
-			      <div class="col col-1" data-label="Tên món ăn" th:text="${chiTiet.monAn.ten}"></div>
-			      <div class="col col-2" data-label="Số lượng" th:text="${chiTiet.soLuong}"></div>
-			      <div class="col col-3" data-label="Giá" th:text="${chiTiet.monAn.gia}"></div>
-			    </li>
-			  </ul>
-			</div>
-	    </div>
-	    <div style="display: flex; justify-content: space-between;">
-		    <form th:action="@{/admin/donhang/confirm/{id}(id=${donHang.id})}" method="post">
-		        <button type="submit" th:disabled="${donHang.trangThai != 'Chưa xác nhận'}">Xác nhận đơn hàng</button>
-		    </form>
-		    <form th:action="@{/admin/donhang/reject/{id}(id=${donHang.id})}" method="post">
-		        <button type="submit" th:disabled="${donHang.trangThai != 'Chưa xác nhận'}">Từ chối đơn hàng</button>
-		    </form>
-		</div>
+  <div class="home-oder">
+    <div style="width: 100%; margin-left: 20px;margin-top: 20px;">
+      <a class="back" href="/admin/donhang">TRỞ VỀ</a>
     </div>
-</div>
-</body>
+	<div th:if="${donHang != null and not #lists.isEmpty(chiTietDonHang)}">
+    <section class="main-pd-wrapper">
+      <div style="
+                  text-align: center;
+                  line-height: 1.5;
+                  font-size: 14px;
+                  color: #4a4a4a;
+                ">
+                <p style="font-weight: bold; color: #000; margin-top: 15px; font-size: 18px;">
+                  Chi tiết đơn hàng
+                </p>
+                <p th:text="${donHang.nguoiDung.thongTinKhachHang.hoTen}"></p>
+                <p>
+                  <b>Email:</b><span th:text="${donHang.nguoiDung.thongTinKhachHang.email}"></span>
+                </p>
+                <p>
+                  <b>Địa chỉ:</b> <span th:text="${donHang.nguoiDung.thongTinKhachHang.diaChi}"></span>
+                </p>
+                <p>
+                  <b>Số điện thoại:</b> <span th:text="${donHang.nguoiDung.thongTinKhachHang.soDienThoai}"></span>
+                </p>
+                <p>
+                  <b>Tổng tiền:</b> <span th:text="${tong}"></span>
+                </p>
+                <hr style="border: 1px dashed rgb(131, 131, 131); margin: 25px auto">
+              </div>
+              <div style="overflow-y: auto;">
+              	<table class="details-table">
+	                <thead>
+	                  <tr>
+	                    <th style="width: 50px; padding-left: 0;">STT</th>
+	                    <th style="width: 220px;">Tên món ăn</th>
+	                    <th>Số lượng</th>
+	                    <th style="text-align: right; padding-right: 0;">Giá</th>
+	                  </tr>
+	                </thead>
+	                <tbody>
+	            		<tr th:each="chiTiet, chiTietIndex : ${chiTietDonHang}">
+				            <td th:text="${chiTietIndex.index + 1}"></td>
+				            <td th:text="${chiTiet.monAn.ten}"></td>
+				            <td th:text="${chiTiet.soLuong}"></td>
+				            <td th:text="${chiTiet.monAn.gia}"></td>
+				        </tr>              
+	                </tbody>
+	              </table>
+              </div>
+
+              <!--<table style="background: #fcbd024f; border-radius: 4px;">
+                <thead>
+                  <tr>
+                    <th>Total</th>
+                    <th style="text-align: center;">Item (10)</th>
+                    <th>&nbsp;</th>
+                    <th style="text-align: right;">₹ 396</th>
+                    
+                  </tr>
+                </thead>
+             	
+              </table>-->
+
+    </section>
+    </div>
+    </div>
+  </body>
 </html>

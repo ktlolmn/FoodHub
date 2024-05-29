@@ -14,4 +14,8 @@ public interface DonHangService {
     void deleteDonHang(Long id);
 
     List<DonHang> getDonHangByTrangThai(String trangThai);
+    
+    // Thêm phương thức mới để lưu đơn hàng và chi tiết đơn hàng
+    void saveOrder(List<Long> foodIds, String address, Long userId, Double total);
+
 }

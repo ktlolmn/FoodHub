@@ -4,10 +4,18 @@
     <meta charset="UTF-8">
     <title>Quản lí món ăn</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script>
         document.addEventListener('DOMContentLoaded', function() {
         	
-        	
+        	var currentURL = window.location.href;
+	       	if (currentURL.includes("error") || currentURL.includes("success")) {
+	       	    document.getElementById("errorAlert").style.display = "block";
+	       	    setTimeout(()=>{
+	       	    	document.getElementById("errorAlert").style.display = "none";
+	       	    },3000)
+	       	}
+
             document.getElementById('editModal').style.display = 'none';
             document.getElementById('addModal').style.display = 'none';
 
@@ -42,13 +50,28 @@
                     this.value = this.value.replace(/[^0-9]/g, ''); // Chỉ giữ lại các ký tự số
                 });
             });
+            
+            const checkBox = document.querySelector("#keepImageCheckbox");
+            checkBox.addEventListener('change', () => {
+                const fileImg = document.querySelector('#file');
+                if (checkBox.checked) {
+                    fileImg.removeAttribute('required');
+                } else {
+                    fileImg.setAttribute('required', 'required');
+                }
+            });
         });
     </script>
+    
     <!-- Thêm CSS vào đây -->
     <style>
 	    body{
 	    		font-family: arial;
 	    	}
+	    	
+	    .search-btn:focus{
+	    	outline: none;
+	    }
         .home-oder {
             position: relative;
             background-color: rgba(95, 158, 160, 0.692);
@@ -66,7 +89,8 @@
         }
 
         .list-items {
-            margin-top: 12px;
+        	
+            margin-top: 24px;
             text-align: center;
             border-radius: 10px;
             box-shadow: 2px 3px 10px #838181;
@@ -96,6 +120,7 @@
         }
 
         .item {
+        	position: relative;
             background-color: #ffff;
             margin: 10px;
             width: calc(25% - 25px);
@@ -104,9 +129,13 @@
             border-radius: 10px;
             overflow: hidden;
             height: 280px;
-            box-shadow: 4px 4px 10px #615f5f;
+ 			transition: .3s;
         }
 
+		.item:hover{
+			box-shadow: 4px 4px 10px #615f5f;
+		}
+		
         .item img {
             width: 100%;
             height: 60%;
@@ -116,30 +145,57 @@
             height: 40%;
         }
 
-        .item .decrip h4 {
-            height: 33px;
-            margin: 4px 0 0 0;
-            padding: 0;
-        }
+        
 
         .item .decrip p {
             margin: 4px 0;
             padding: 0;
         }
-
-        .item .decrip button {
-        	box-shadow: 3px 4px 10px grey;
-            margin: 4px 0;
-            padding: 8px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: rgba(122, 71, 23, 0.671);
-            color: #fff;
-        }
-
         .item .decrip button:hover {
             cursor: pointer;
         }
+        
+		.button-8 {
+		  background-color: #e1ecf4;
+		  border-radius: 13px;
+		  border: 1px solid #7aa7c7;
+		  box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
+		  box-sizing: border-box;
+		  color: #39739d;
+		  cursor: pointer;
+		  display: inline-block;
+		  font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+		  font-size: 13px;
+		  font-weight: 400;
+		  line-height: 1.15385;
+		  margin: 0;
+		  outline: none;
+		  padding: 6px 14px;
+		  position: relative;
+		  text-align: center;
+		  text-decoration: none;
+		  user-select: none;
+		  -webkit-user-select: none;
+		  touch-action: manipulation;
+		  vertical-align: baseline;
+		  white-space: nowrap;
+		}
+		
+		.button-8:hover,
+		.button-8:focus {
+		  background-color: #b3d3ea;
+		  color: #2c5777;
+		}
+		
+		.button-8:focus {
+		  box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+		}
+		
+		.button-8:active {
+		  background-color: #a0c7e4;
+		  box-shadow: none;
+		  color: #2c5777;
+		}
 
         .modal {
             display: none;
@@ -151,7 +207,7 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.4);
-            padding-top: 60px;
+            padding-top: 40px;
         }
 
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
@@ -170,9 +226,11 @@
 			max-width: 100%;
 			display: block;
 		}
+		h3{
+			font-size: 20px;
+		}
 		 
 		input {
-			appearance: none;
 			border-radius: 0;
 		}
 		
@@ -249,7 +307,7 @@
 		}
 		
 		.action {
-			margin-top: 1.5rem;
+			margin-top: 1.3rem;
 			display: flex;
 			justify-content: end;
 		}
@@ -258,7 +316,7 @@
 			cursor: pointer; 
             margin: 12px; 
             padding: 8px;
-            border-radius: 5px; 
+            border-radius: 8px; 
             background-color: rgba(122, 71, 23, 0.671); 
             box-shadow: 3px 4px 10px grey;
 			color: #FFF;
@@ -279,42 +337,185 @@
 				text-decoration: none;
 			}
 		}
+		
+		
+		.bg-red{
+			border: 2px red solid;
+			
+		}
+		
+		.bg-gr{
+			border: 2px green solid;
+		}
+		
+		h2 {
+		  font-size: 26px;
+		  margin: 20px 0;
+		  font-weight:550;
+		  text-align: center;
+		  small {
+		    font-size: 0.5em;
+		  }
+		}
+		
+		h4{
+			font-weight: bold;
+		}
+		
+		.switch {
+		  position: relative;
+		  display: inline-block;
+		  width: 34px;
+		  height: 18px;
+		}
+		
+		.switch input { 
+		  opacity: 0;
+		  width: 0;
+		  height: 0;
+		}
+		
+		.slider {
+		  position: absolute;
+		  cursor: pointer;
+		  top: 0;
+		  left: 0;
+		  right: 0;
+		  bottom: 0;
+		  border: 1px #b2b3b6 solid;
+		  background-color: #cecece;
+		  -webkit-transition: .4s;
+		  transition: .4s;
+		}
+		
+		.slider:before {
+			position: absolute;
+			content: "";
+			height: 16px;
+			width: 16px;
+			left: 0px;
+			bottom: 0px;
+			background-color: #ffff;
+			-webkit-transition: .4s;
+			transition: .4s;
+		}
+		
+		input:checked + .slider {
+		  background-color: rgb(65, 68, 186);
+		}
+		
+		input:focus + .slider {
+		  box-shadow: 0 0 1px rgb(65, 68, 186);
+		}
+		
+		input:checked + .slider:before {
+		  -webkit-transform: translateX(16px);
+		  -ms-transform: translateX(16px);
+		  transform: translateX(16px);
+		}
+		
+		/* Rounded sliders */
+		.slider.round {
+		  border-radius: 34px;
+		}
+		
+		.slider.round:before {
+		  border-radius: 50%;
+		}
+
+		.error {
+            display: none;
+			margin-top: 20px;
+            color: rgb(139, 37, 37);
+        }
+
+		#submitButton:disabled {
+            background-color: grey;
+            cursor: not-allowed;
+        }
+				
     </style>
 </head>
 <body>
 <div th:replace="admin/Fragments/header :: header"></div>
 <div class="home-oder">
-    <button type="button" id="addBtn">Thêm mới món ăn</button>
+	<div style="position: absolute;top: 14px;left: 14px;">
+    	<button style="cursor: pointer;
+			    margin: 12px;
+			    padding: 6px;
+			    border-radius: 23px;
+			    background-color: #dee2e6;
+			    box-shadow: 3px 4px 10px grey;
+			    color: #000;
+			    border: 0;" type="button" id="addBtn"><i style="font-size: 16px; margin-right: 4px;" class="fas fa-plus-circle"></i>Thêm mới món ăn</button>
+	</div>
+	<div style="position: absolute;top: 14px;right: 14px;">
+		<form action="/admin/monan/filter" method = 'post'>
+			<input name="keyWord" style="padding: 8px;
+			    outline: none;
+			    border: none;
+			    /* opacity: 51.8; */
+			    font-size: 12px;
+			    border-radius: 30px;" 
+				type="text" id="searchInput" placeholder="Nhập từ khóa...">
+		    <button class="search-btn" type="submit" style="border: none; cursor: pointer; 
+		        cursor: pointer;
+			    margin: 12px 12px 12px -38px;
+			    padding: 1px 5px;
+			    border-radius: 5px;
+			    background-color: #fff;
+			    color: grey;
+			    border: 0;" id="searchBtn"><i style="font-size: 16px; margin-right: 4px;" class="fas fa-search"></i></button>
+		
+		</form>
+	</div>
     <h2>Danh sách món ăn</h2>
     <ul style="overflow: auto;" class="list-items">
-        <li th:each="monAn : ${danhSachMonAn}" class="item">
-            <img th:src="'data:image/jpeg;base64,' + ${monAn.base64Image}" alt="Image">
-            <div class="decrip">
-                <h4 th:text="${monAn.ten}"></h4>
-                <p th:text="${monAn.gia}"></p>
-                <button type="button" class="editBtn" th:data-id="${monAn.id}" th:data-ten="${monAn.ten}" th:data-gia="${monAn.gia}">Sửa</button>
-                <a th:href="@{'/admin/monan/delete/' + ${monAn.id}}">Xoá</a>
-            </div>
-        </li>
-    </ul>
-    
-    
-	<div class="modal container" id="editModal">
+    	<th:block style="text-align:center" th:if="${danhSachMonAn.isEmpty()}">
+	        <p>Danh sách món ăn trống.</p>
+	    </th:block>
+	    <li th:each="monAn : ${danhSachMonAn}" th:class="${monAn.trangThai} ? 'item bg-gr' : 'item bg-red'">
+	        <div style="position: relative;">
+	            <img th:src="'data:image/jpeg;base64,' + ${monAn.base64Image}" alt="Image" style="width: 100%; height: 160px;">
+	            <div style ="position: absolute; top:6px; right:6px;">
+	            	<label class="switch">
+					  <input type="checkbox" id="toggleMonAnCheckbox" th:data-monan-id="${monAn.id}" th:checked="${monAn.trangThai}" onchange="toggleMonAn(this)">
+					  <span class="slider round"></span>
+					</label>
+	            </div>
+	        </div>
+	        <div class="decrip">
+	            <h5 th:text="${monAn.ten}"></h5>
+				<p th:text="${monAn.gia}">đ</p>
+	            <button type="button" class="editBtn button-8" th:data-id="${monAn.id}" th:data-ten="${monAn.ten}" th:data-gia="${monAn.gia}">Sửa</button>
+	            
+	        </div>
+	    </li>
+	</ul>
+	
+	<div class="alert alert-danger fade show" role="alert" id="errorAlert" style="display: none; position: absolute;">
+	  <h4 th:text="${message}"></h4>
+	</div>
+	<div class="modal" id="editModal">
 		<div class="card">
 			<h3 style="text-align:center;">Thay đổi thông tin món ăn</h3>
 			<form class="card-form" id="editForm" th:action="@{/admin/monan/save}" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="id">
 				<div class="input">
-					<input type="text" name="ten" class="input-field"required/>
+					<input type="text" name="ten" class="input-field" required>
 					<label class="input-label">Tên món ăn</label>
 				</div>
 				<div class="input">
-					<input type="text" name="gia" class="input-field gia" required/>
-					<label class="input-label">Giá</label>
+					<input type="text" name="gia" class="input-field gia" required oninput="formatCurrency(this)">
+					<label class="input-label">Giá (VND)</label>
 				</div>
 				<div class="input">
-					<input type="file" name="file" required><br>
+					<input id="file" type="file" name="file" required><br>
 					<label class="input-label">Ảnh mô tả</label>
+				</div>
+				<div class="input">
+					<input style="position: absolute; left: 35%; top: 52%; transform: scale(1.5);" type="checkbox" name="keepImage" id="keepImageCheckbox">
+					<label for="keepImageCheckbox">Giữ lại ảnh cũ</label>
 				</div>
 				<div class="action">
 					<button type="submit" class="action-button">Cập nhật</button>
@@ -323,31 +524,106 @@
 			</form>
 		</div>
 	</div>
-
-    <!-- Modal for add!-->
-    <div class="modal container" id="addModal">
+	
+	<!-- Add Modal -->
+	<div class="modal" id="addModal">
 		<div class="card">
-			<h3 style="text-align:center;">Thay đổi thông tin món ăn</h3>
-			<form class="card-form" id="addForm" th:action="@{/admin/monan/save}" method="post" enctype="multipart/form-data">
+			<h3 style="text-align:center;">Thêm mới món ăn</h3>
+			<form class="card-form" id="addForm" th:action="@{/admin/monan/save}" method="post" enctype="multipart/form-data" >
 				<div class="input">
-					<input type="text" name="ten" class="input-field"required/>
+					<input type="text" name="ten" class="input-field" required>
 					<label class="input-label">Tên món ăn</label>
 				</div>
 				<div class="input">
-					<input type="text" name="gia" class="input-field gia" required/>
-					<label class="input-label">Giá</label>
+					<input type="text" name="gia" class="input-field gia" required oninput="formatCurrency(this)">
+					<label class="input-label">Giá (VND)</label>
 				</div>
 				<div class="input">
-					<input type="file" name="file" required><br>
+					<input id="fileInput"  type="file" name="file" required><br>
 					<label class="input-label">Ảnh mô tả</label>
+					<p id="errorFile" class="error">Ảnh không hợp lệ</p>
 				</div>
 				<div class="action">
-					<button type="submit" class="action-button">Cập nhật</button>
+					<button id="addSubmitForm" type="submit" class="action-button">Thêm mới</button>
 					<button id="closeAdd" type="button" class="action-button">Hủy</button>
 				</div>
 			</form>
 		</div>
 	</div>
 </div>
+<script th:inline="javascript">
+
+	document.getElementById('fileInput').addEventListener('change', function() {
+		var file = this.files[0];
+
+		var errorMessage = document.getElementById('errorFile');
+		var submitButton = document.getElementById('addSubmitForm');
+		var validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+		if (file && !validImageTypes.includes(file.type)) {
+			errorMessage.style.display = 'block';
+			this.value = ''; // Clear the input
+			submitButton.disabled = true; // Disable submit button
+			submitButton.style.cursor = "not-allowed"; // Change cursor style
+		} else {
+			errorMessage.style.display = 'none';
+			submitButton.disabled = false; // Enable submit button
+			submitButton.style.cursor = "pointer"; // Change cursor style
+		}
+	});
+	function validateForm() {
+		const fileInput = document.getElementById('file');
+		const filePath = fileInput.value;
+		const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+		if (!allowedExtensions.exec(filePath)) {
+			alert('Vui lòng chọn file hình ảnh (jpg, jpeg, png, gif)');
+			fileInput.value = '';
+			return false;
+		}
+		return true;
+	}
+
+	function toggleMonAn(checkbox) {
+	    var monAnId = checkbox.getAttribute('data-monan-id');
+	    var isChecked = checkbox.checked;
+	
+	    var xhr = new XMLHttpRequest();
+	    xhr.open('GET', '/admin/monan/toggle/' + monAnId, true);
+	    xhr.onload = function () {
+	    	window.location.href = '/admin/monan';
+	    };
+	    xhr.send();
+	}
+
+    function formatCurrency(input) {
+        // Remove non-digit characters
+        var value = input.value.replace(/\D/g, '');
+
+        // Format as VND
+        var formatter = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+
+        // Update input value
+        input.value = formatter.format(value);
+    }
+
+	function formatPrice(price) {
+        // Chuyển đổi giá sang số nguyên
+        var integerPrice = parseInt(price);
+
+        // Kiểm tra xem giá có phải là số nguyên không
+        if (isNaN(integerPrice)) {
+            return price; // Nếu không phải số nguyên, trả về giá ban đầu
+        }
+
+        // Format giá tiền, loại bỏ các số thập phân và thêm dấu ,
+        var formattedPrice = integerPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+
+        return formattedPrice;
+    }
+</script>
+
 </body>
 </html>
