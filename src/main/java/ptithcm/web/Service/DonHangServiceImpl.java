@@ -85,4 +85,9 @@ public class DonHangServiceImpl implements DonHangService {
 	public List<DonHang> findAllByNguoiDungId(Long nguoiDungId) {
         return donHangRepository.findAllByNguoiDungId(nguoiDungId);
     }
+
+    @Override
+    public List<DonHang> findAllByNguoiDungIdAndTrangThai(Long idNguoiDung, String trangThai){
+        return donHangRepository.findAllByNguoiDungIdAndTrangThai(idNguoiDung, trangThai);
+    }
 }

@@ -22,4 +22,6 @@ public interface DonHangService {
     List<DonHang> findAllByTenDangNhap(String tenDangNhap);
     
     List<DonHang> findAllByNguoiDungId(Long nguoiDungId);
+
+    List<DonHang> findAllByNguoiDungIdAndTrangThai(Long idNguoiDung, String trangThai);
 }

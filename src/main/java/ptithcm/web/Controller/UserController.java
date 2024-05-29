@@ -5,6 +5,8 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -77,7 +79,7 @@ public class UserController {
 		if (thongTinKhachHang != null) {
 			model.addAttribute("foodIds", foodIds);
 	        model.addAttribute("total", total);
-	        return "user/save-order";
+	        return "user/save-order1";
 		}else {
 			redirectAttributes.addFlashAttribute("message", "Vui lòng nhập thông tin cá nhân");
 	        return "redirect:/user/main?error?";
@@ -122,6 +124,10 @@ public class UserController {
 	    
 	    // Lấy danh sách đơn hàng theo ID người dùng
 	    List<DonHang> danhSachDonHang = donHangService.findAllByNguoiDungId(nguoiDung.getId());
+		Set<String> danhSachTrangThai = danhSachDonHang.stream()
+                .map(DonHang::getTrangThai)
+                .collect(Collectors.toSet());
+		model.addAttribute("danhSachTrangThai", danhSachTrangThai);
 	    
 	    // Thêm danh sách đơn hàng vào model
 	    model.addAttribute("danhSachDonHang", danhSachDonHang);
@@ -142,11 +148,36 @@ public class UserController {
 		for (ChiTietDonHang ct : chiTietDonHang) {
 			tong += ct.getMonAn().getGia();
 		}
+		Set<String> danhSachTrangThai = danhSachDonHang.stream()
+                .map(DonHang::getTrangThai)
+                .collect(Collectors.toSet());
+		model.addAttribute("danhSachTrangThai", danhSachTrangThai);
+
 
         model.addAttribute("donHang", donHang);
 		model.addAttribute("tong", tong);
         model.addAttribute("chiTietDonHang", chiTietDonHang);
         model.addAttribute("danhSachDonHang", danhSachDonHang);
+        return "user/xemdon";
+    }
+
+	@PostMapping("/xemdon/filter")
+    public String filterDonHang(@SessionAttribute(name = "username") String tenDangNhap, @RequestParam("trangThai") String trangThai, Model model) {
+
+		NguoiDung nguoiDung = nguoiDungService.findByTenDangNhap(tenDangNhap);
+	    List<DonHang> danhSachDonHang = donHangService.findAllByNguoiDungId(nguoiDung.getId());
+
+        if (trangThai == null || trangThai.isEmpty()) {
+            danhSachDonHang = donHangService.findAllByNguoiDungId(nguoiDung.getId());
+        } else {
+			danhSachDonHang = donHangService.findAllByNguoiDungIdAndTrangThai(nguoiDung.getId(), trangThai);
+        }
+        Set<String> danhSachTrangThai = danhSachDonHang.stream()
+                .map(DonHang::getTrangThai)
+                .collect(Collectors.toSet());
+
+        model.addAttribute("danhSachDonHang", danhSachDonHang);
+        model.addAttribute("danhSachTrangThai", danhSachTrangThai);
         return "user/xemdon";
     }
 

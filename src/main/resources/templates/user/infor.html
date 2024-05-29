@@ -7,122 +7,124 @@
     <title>Thông tin người dùng</title>
 </head>
 <style>
-    /* Modal chi tiết */
-.modal-details {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.45);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
-}
+    body{
+        font-family: arial;
+    }
+    .modal-details {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-top-left-radius: 25px;
+        border-bottom-left-radius: 25px;
+    }
 
-.main-pd-wrapper {
-    position: relative;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    max-width: 500px;
-    width: 100%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+    .main-pd-wrapper {
+        position: relative;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        max-width: 500px;
+        width: 100%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-.close-btn {
-    position: absolute;
-    top: 0;
-    right: 10px;
-    margin: 0;
-    border: none;
-    cursor: pointer;
-    background-color: #fff;
-    font-size: 36px;
-    line-height: 36px;
-    color: #000;
-}
+    .close-btn {
+        position: absolute;
+        top: 0;
+        right: 10px;
+        margin: 0;
+        border: none;
+        cursor: pointer;
+        background-color: #fff;
+        font-size: 36px;
+        line-height: 36px;
+        color: #000;
+    }
 
-.modal-content {
-    text-align: center;
-    line-height: 1.5;
-    font-size: 14px;
-    color: #4a4a4a;
-    margin-top: 26px;
-    border: none;
-}
+    .modal-content {
+        text-align: center;
+        line-height: 1.5;
+        font-size: 14px;
+        color: #4a4a4a;
+        margin-top: 26px;
+        border: none;
+    }
 
-.modal-content label {
-    display: inline-block;
-    width: 100px; /* Đặt chiều rộng cố định cho nhãn để canh thẳng hàng với các ô nhập liệu */
-    text-align: left;
-    padding-right: 10px;
-}
+    .modal-content label {
+        display: inline-block;
+        width: 100px; /* Đặt chiều rộng cố định cho nhãn để canh thẳng hàng với các ô nhập liệu */
+        text-align: left;
+        padding-right: 10px;
+    }
 
-.modal-content input {
-    width: calc(100% - 10px); /* Đảm bảo ô nhập liệu không bị tràn ra ngoài nhãn */
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
+    .modal-content input {
+        width: calc(100% - 10px); /* Đảm bảo ô nhập liệu không bị tràn ra ngoài nhãn */
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
 
-.form-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
+    .form-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
 
-.divider {
-    border: 1px dashed #838383;
-    margin: 25px auto;
-}
+    .divider {
+        border: 1px dashed #838383;
+        margin: 25px auto;
+    }
 
-.button-container {
-    display: flex;
-    flex-direction: row-reverse;
-}
+    .button-container {
+        display: flex;
+        flex-direction: row-reverse;
+    }
 
-.action-btn {
-    margin: 12px;
-    padding: 6px 18px;
-    border-radius: 3px;
-    background-color: #dee2e6;
-    box-shadow: 3px 4px 10px #80808036;
-    color: #000;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-}
+    .action-btn {
+        margin: 12px;
+        padding: 6px 18px;
+        border-radius: 3px;
+        background-color: #dee2e6;
+        box-shadow: 3px 4px 10px #80808036;
+        color: #000;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
 
-.action-btn:hover {
-    background-color: #ced4da;
-}
+    .action-btn:hover {
+        background-color: #ced4da;
+    }
 
-.action-btn:disabled {
-    background-color: #e9ecef;
-    cursor: not-allowed;
-}
+    .action-btn:disabled {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+    }
 
-.home-oder {
-    position: relative;
-    background-color: rgba(95, 158, 160, 0.692);
-    margin-left: 290px;
-    margin-top: 40px;
-    max-height: 670px;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items:center;
-    height: 570px;
-    padding: 0;
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
-}
+    .home-oder {
+        position: relative;
+        background-color: rgba(95, 158, 160, 0.692);
+        margin-left: 290px;
+        margin-top: 40px;
+        max-height: 670px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items:center;
+        height: 570px;
+        padding: 0;
+        border-top-left-radius: 25px;
+        border-bottom-left-radius: 25px;
+    }
 
 </style>
 <body>

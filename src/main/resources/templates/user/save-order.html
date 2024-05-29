@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 	<style>
+		body{
+			font-family: arial;
+		}
 	    .home-oder{
 	        position: relative;
 	        display: block;
@@ -139,7 +142,7 @@
 	    }
 	
 	    .main-order {
-	        margin: 8px;
+	        margin-left: 10%;
 	        width: auto;
 	        border-collapse: collapse;
 	        max-height: 300px; /* Đặt chiều cao tối đa cho bảng */
@@ -221,6 +224,42 @@
 	        
 	        margin-left: 40px;
 	    }
+
+		.button-8 {
+		  background-color: #e1ecf4;
+		  border-radius: 13px;
+		  border: 1px solid #7aa7c7;
+		  box-shadow: rgba(255, 255, 255, .7) 0 1px 0 0 inset;
+		  box-sizing: border-box;
+		  color: #39739d;
+		  cursor: pointer;
+		  display: inline-block;
+		  font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+		  font-size: 13px;
+		  font-weight: 400;
+		  line-height: 1.15385;
+		  margin: 0;
+		  outline: none;
+		  padding: 6px 14px;
+		  position: relative;
+		  text-align: center;
+		  text-decoration: none;
+		  user-select: none;
+		  -webkit-user-select: none;
+		  touch-action: manipulation;
+		  vertical-align: baseline;
+		  white-space: nowrap;
+		}
+		
+		.button-8:hover,
+		.button-8:focus {
+		  background-color: #b3d3ea;
+		  color: #2c5777;
+		}
+		
+		.button-8:focus {
+		  box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
+		}
 	
 	
 	    .operation{
@@ -263,14 +302,22 @@
 	    #toast.show {
 	        visibility: visible;
 	    }
+
+		.form-group{
+			width: 430px;
+			display: flex;
+    		flex-direction: column;
+		}
+
+		
 	
 	</style>
 </head>
 <body>
     <div th:insert="~{user/Fragments/header :: header}"></div>
     <div class="home-oder">
-        <h2 class="header-oder">Thông tin đơn hàng</h2>
-        <form class="main-order" action="/user/confirm-order" method="POST">
+		<form class="main-order" action="/user/confirm-order" method="POST">
+			<h4 style="margin: 5% 20px 30px 120px;" class="header-oder">Thông tin đơn hàng</h4>
             <div class="form-group">
                 <label for="address">Địa chỉ giao hàng:</label>
                 <input type="text" class="form-control" id="address" name="address" required>
@@ -280,8 +327,8 @@
                 <input type="text" class="form-control" id="total" name="total" th:value="${total}" readonly>
             </div>
             <input type="hidden" name="foodIds" id="foodIdsField" th:value="${foodIds}">
-            <button type="submit" class="btn btn-primary">Xác nhận đặt hàng</button>
-			<button type="button" class="btn btn-secondary" onclick="window.location.href='/user/main'">Hủy</button>
+            <button type="submit" class="button-8">Xác nhận đặt hàng</button>
+			<button type="button" class="button-8" onclick="window.location.href='/user/main'">Hủy</button>
         </form>
     </div>
 </body>
