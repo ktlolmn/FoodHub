@@ -120,24 +120,24 @@
         <div class="row d-flex justify-content-center align-items-center">
             <div class="modal-content-login">
               <h3>Đăng nhập</h3>
-                <form id="login-form" method="POST" th:action="@{/login}" onsubmit="return validateLoginForm()">
+                <form id="login-form" method="POST" th:action="@{/login}" th:object="${nguoiDung}">
                     <label for="tenDangNhap">Tên đăng nhập</label>
                     <div class="block-css">
-                      <input type="text" id="tenDangNhap" name="tenDangNhap" >
-                      <p class="error-message" id="errorTenDangNhap"></p>
+                      <input type="text" id="tenDangNhap" name="tenDangNhap" th:field="*{tenDangNhap}">
+                      <p class="error-message" th:if="${#fields.hasErrors('tenDangNhap')}" th:errors="*{tenDangNhap}"></p>
                     </div>
 
                     <label for="matKhau">Mật khẩu</label>
                     <div class="block-css">
-                      <input type="password" id="matKhau" name="matKhau" >
-                      <p class="error-message" id="errorMatKhau"></p>
+                      <input type="password" id="matKhau" name="matKhau" th:field="*{matKhau}">
+                      <p class="error-message" th:if="${#fields.hasErrors('matKhau')}" th:errors="*{matKhau}">hhhh</p>
                     </div>
 
                     <a href="/forgot-password">Quên mật khẩu?</a>
 
                     <div>
                         <button type="submit">Đăng nhập</button>
-                        <p class="error-message" th:text="${errorMessage}"></p>
+                        <p class="error-message" th:if="${errorMessage}" th:text="${errorMessage}"></p>
                         <p class="register-link">Bạn chưa có tài khoản? <a href="/register" class="register-link">Đăng ký</a></p>
                     </div>
                 </form>

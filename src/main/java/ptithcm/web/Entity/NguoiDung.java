@@ -1,6 +1,8 @@
 package ptithcm.web.Entity;
 
+import javax.validation.constraints.NotBlank;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 
 
 @Entity
@@ -22,18 +24,21 @@ public class NguoiDung {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-//	@NotBlank(message = "Tên đăng nhập không được trống")
+
+	@NotEmpty(message = "Vui lòng nhập tên đăng nhập!")
     @Column(name = "tenDangNhap", unique = true)
     private String tenDangNhap;
-    
-//	@NotBlank(message = "Mật khẩu không không được trống")
+
+	@NotEmpty(message = "Vui lòng nhập mật khẩu!")
     @Column(name = "matKhau")
     private String matKhau;
-    
+
     @ManyToOne
     @JoinColumn(name = "vaiTroId")
     private VaiTro vaiTro;
+
+    @OneToOne(mappedBy = "nguoiDung")
+    private ThongTinKhachHang thongTinKhachHang;
     
     public ThongTinKhachHang getThongTinKhachHang() {
 		return thongTinKhachHang;
@@ -42,9 +47,6 @@ public class NguoiDung {
 	public void setThongTinKhachHang(ThongTinKhachHang thongTinKhachHang) {
 		this.thongTinKhachHang = thongTinKhachHang;
 	}
-
-	@OneToOne(mappedBy = "nguoiDung")
-    private ThongTinKhachHang thongTinKhachHang;
 
 	public Long getId() {
 		return id;

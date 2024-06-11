@@ -2,6 +2,8 @@ package ptithcm.web.Entity;
 
 import jakarta.persistence.*;
 import java.math.*;
+import jakarta.validation.*;
+import jakarta.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "MonAn")

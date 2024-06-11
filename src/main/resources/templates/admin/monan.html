@@ -490,7 +490,7 @@
 	        </div>
 	        <div class="decrip">
 	            <h5 th:text="${monAn.ten}"></h5>
-				<p th:text="${monAn.gia} + 'đ'"></p>
+				<p th:text="${#numbers.formatDecimal(monAn.gia, 1, 'COMMA', 0, 'POINT')} + ' đ'"></p>
 	            <button type="button" class="editBtn button-8" th:data-id="${monAn.id}" th:data-ten="${monAn.ten}" th:data-gia="${monAn.gia}">Sửa</button>
 	            
 	        </div>

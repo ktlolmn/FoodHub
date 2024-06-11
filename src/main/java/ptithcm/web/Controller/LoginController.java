@@ -2,11 +2,15 @@ package ptithcm.web.Controller;
 
 import java.util.Random;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -38,6 +42,7 @@ public class LoginController {
     	HttpSession session = request.getSession();
     	session.removeAttribute("username");
     	session.removeAttribute("role");
+        modelMap.addAttribute("nguoiDung", new NguoiDung());
         return "login/login";
     }
     
@@ -45,15 +50,20 @@ public class LoginController {
     private HttpServletRequest request;
 
     @PostMapping("/login")
-    public String login(@RequestParam("tenDangNhap") String tenDangNhap,
-                        @RequestParam("matKhau") String matKhau,
+    public String login(@Valid @ModelAttribute("nguoiDung") NguoiDung nguoiDung,
+                        BindingResult bindingResult,
                         HttpServletRequest request,
                         RedirectAttributes redirectAttributes) {
-        NguoiDung nguoiDung = nguoiDungService.findByTenDangNhap(tenDangNhap);
-        if (nguoiDung != null && BCrypt.checkpw(matKhau, nguoiDung.getMatKhau())) {
+
+        if (bindingResult.hasErrors()) {
+            return "login/login";
+        }
+
+        NguoiDung dbNguoiDung = nguoiDungService.findByTenDangNhap(nguoiDung.getTenDangNhap());
+        if (dbNguoiDung != null && BCrypt.checkpw(nguoiDung.getMatKhau(), dbNguoiDung.getMatKhau())) {
             HttpSession session = request.getSession();
-            session.setAttribute("username", tenDangNhap);
-            if (nguoiDung.getVaiTro().getTenVaiTro().equals("Admin")) {
+            session.setAttribute("username", nguoiDung.getTenDangNhap());
+            if ("Admin".equals(dbNguoiDung.getVaiTro().getTenVaiTro())) {
                 session.setAttribute("role", "Admin");
                 return "redirect:/admin/monan";
             } else {
@@ -65,6 +75,7 @@ public class LoginController {
             return "redirect:/login";
         }
     }
+
     
     @GetMapping("/register")
     public String registerForm(ModelMap modelMap) {
@@ -159,7 +170,7 @@ public class LoginController {
             return "redirect:/forgot-password";
         }else {
         	ThongTinKhachHang thongTinKhachHang = nguoiDung.getThongTinKhachHang();
-        	if(thongTinKhachHang == null || thongTinKhachHang.getEmail() == null) {
+        	if(thongTinKhachHang == null || thongTinKhachHang.getEmail() == null ) {
         		redirectAttributes.addFlashAttribute("errorMessage", "Thông tin không tồn tại!");
                 return "redirect:/forgot-password";
         	}else {

@@ -93,6 +93,7 @@ public class AdminController {
 	@GetMapping("/monan/tat/{id}")
 	public String tatMonAn(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
 		MonAn monAn = monAnService.getMonAnById(id);
+		System.out.print("tẳt");
 		monAn.setTrangThai(false);
 		monAnService.saveMonAn(monAn);
 		return "redirect:/admin/monan";
@@ -102,6 +103,7 @@ public class AdminController {
 	public String batMonAn(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
 		MonAn monAn = monAnService.getMonAnById(id);
 		monAn.setTrangThai(true);
+		System.out.print("bật");
 		monAnService.saveMonAn(monAn);
 		return "redirect:/admin/monan";
 	}
