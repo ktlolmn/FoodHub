@@ -152,8 +152,6 @@ public class UserController {
                 .map(DonHang::getTrangThai)
                 .collect(Collectors.toSet());
 		model.addAttribute("danhSachTrangThai", danhSachTrangThai);
-
-
         model.addAttribute("donHang", donHang);
 		model.addAttribute("tong", tong);
         model.addAttribute("chiTietDonHang", chiTietDonHang);
@@ -205,7 +203,7 @@ public String saveThongTinCaNhan(@SessionAttribute(name = "username") String ten
         model.addAttribute("success", "Lưu thông tin cá nhân thành công.");
     } catch (Exception e) {
         model.addAttribute("error", "Đã xảy ra lỗi khi lưu thông tin cá nhân.");
-        e.printStackTrace(); // Log lỗi ra console
+        e.printStackTrace(); 
     }
     
     return "redirect:/user/infor";

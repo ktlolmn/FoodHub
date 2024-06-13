@@ -129,11 +129,15 @@ public class LoginController {
     	
     	HttpSession session = request.getSession();
         String tenDangNhap = (String) session.getAttribute("username");
+        
+        if(tenDangNhap == null) {
+        	return "redirect:/login";
+        }
 
         NguoiDung nguoiDung = nguoiDungService.findByTenDangNhap(tenDangNhap);
 
     	if(BCrypt.checkpw(matKhauCu,nguoiDung.getMatKhau())){
-            if(nguoiDung.getMatKhau().equals(matKhauMoi)) {
+            if(matKhauCu.equals(matKhauMoi)) {
             	redirectAttributes.addFlashAttribute("errorMessage","Mật khẩu mới trùng mật khẩu cũ!");
         		return"redirect:/change-password";
             }else {
